@@ -69,7 +69,7 @@ const Footer = ({ colorScheme, onSchemeChange }: FooterProps) => {
             size="sm"
             className={`opacity-30 hover:opacity-100 transition-opacity ${
               colorScheme === 'liquidglass' 
-                ? 'text-white/60 hover:text-white' 
+                ? 'text-white/60 hover:text-black' 
                 : colorScheme === 'professional' 
                   ? 'text-gray-600 hover:text-gray-800' 
                   : ''
