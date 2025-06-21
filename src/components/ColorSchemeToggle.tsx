@@ -13,7 +13,7 @@ const ColorSchemeToggle = ({ onSchemeChange }: ColorSchemeToggleProps) => {
     {
       id: 'liquidglass',
       name: 'Liquid Glass',
-      preview: 'bg-gradient-to-r from-blue-400 to-purple-400'
+      preview: 'bg-gradient-to-r from-blue-300 to-purple-100'
     },
     {
       id: 'professional',
@@ -37,19 +37,20 @@ const ColorSchemeToggle = ({ onSchemeChange }: ColorSchemeToggleProps) => {
     <div className="fixed top-4 right-4 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
+        className="glass-floating-question rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer"
       >
-        <Palette className="h-5 w-5 text-gray-500 drop-shadow-sm" />
+        <Palette className="h-5 w-5 text-white/90" />
       </button>
       
       {isOpen && (
-        <div className="absolute top-10 right-0  backdrop-blur-lg border border-gray-100/50  shadow-xl rounded-xl p-3">
+        <div className="absolute top-14 right-0 glass-card shadow-xl rounded-xl p-3">
           <div className="flex gap-2">
             {colorSchemes.map((scheme) => (
               <button
                 key={scheme.id}
                 onClick={() => handleSchemeChange(scheme.id)}
                 className={`w-8 h-8 rounded-full ${scheme.preview} transition-all hover:scale-110 shadow-md hover:shadow-lg border-2 ${
-                  currentScheme === scheme.id ? 'border-white ring-2 ring-white/50' : 'border-gray-600/50 hover:border-white/30'
+                  currentScheme === scheme.id ? 'border-white ring-2 ring-white/50' : 'border-white/30 hover:border-white/50'
                 }`}
                 title={scheme.name}
               />

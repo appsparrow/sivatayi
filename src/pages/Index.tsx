@@ -85,43 +85,58 @@ const Index = () => {
     {
       id: '1',
       question: "What's your design philosophy?",
-      answer: "My approach is rooted in human-centered design, blending empathy with the power of AI and 'vibe coding' to turn ideas into products that truly resonate with users and are ready for the market.",
+      answer: "I design for humans first. I blend empathy with AI and intuitive coding to create products that actually connect with people—not just look pretty.",
       x: 15,
-      y: 22
+      y: 35
     },
     {
       id: '2',
-      question: "What technologies do you work with?",
-      answer: "I specialize in Product Design Strategy, and I have a good understanding of React, TypeScript, and Tailwind CSS, and have a strong grasp of Salesforce product capabilities. My design process is powered by tools like FigJam, Miro, and Figma, along with the latest AI-driven design platforms to craft seamless digital experiences.",
+      question: "What do you work with?",
+      answer: "Product strategy, React, TypeScript, Figma—the usual suspects. But I also love experimenting with AI tools to push creative boundaries and build faster.",
       x: 65,
-      y: 32
+      y: 45
     },
     {
       id: '3',
-      question: "How do you approach new projects?",
-      answer: "Every project starts with understanding people. Even as AI evolves, I believe we're designing for humans first. My process is simple: Ideate → Strategize → Launch. I begin with user research, prototype with 'vibe coding', and deliver working products through a systematic, iterative approach.",
+      question: "How do you start projects?",
+      answer: "Simple: understand people first. I follow Ideate → Design → Develop → Deliver, but always with real humans at the center of every decision.",
       x: 75,
-      y: 18
+      y: 30
     },
     {
       id: '4',
-      question: "What sets you apart?",
-      answer: "I bring together human-centered design, technical depth, and an AI-first mindset. My unique blend of design thinking, product strategy, and hands-on coding allows me to bridge the gap between concept and market-ready product.",
+      question: "What makes you different?",
+      answer: "I think like a designer, build like a developer, and dream like an explorer. I bridge ideas and reality—turning 'what if' into 'here it is.'",
       x: 35,
-      y: 28
+      y: 42
     },
     {
       id: '5',
-      question: "How do you prepare for the future?",
-      answer: "I build with AI and for AI—constantly integrating generative tools, exploring neural networks, and designing for intelligent, adaptive experiences that define the next generation of digital products.",
+      question: "How do you stay ahead?",
+      answer: "I build with AI, not against it. Always learning, always experimenting, always asking 'what's next?' instead of 'what's safe?'",
       x: 50,
-      y: 20
+      y: 33
     }
   ];
 
   const projects = [
     {
       id: 1,
+      title: "Insights Hub - AI-Powered Analytics Platform",
+      category: "AI & Data Analytics",
+      description: "Comprehensive data visualization dashboard with AI-generated insights, predictive analytics, and automated reporting for enterprise decision-making.",
+      image: "/project-images/stp-insights01.png",
+      images: [
+        "/project-images/stp-insights01.png",
+        "/project-images/stp-insights02.png"
+      ],
+      tags: ["AI/ML", "Data Visualization", "Enterprise Analytics"],
+      problem: "Organizations struggled with fragmented data sources, manual reporting processes, and lack of actionable insights from complex datasets, leading to delayed decision-making and missed opportunities.",
+      solution: "Designed and developed an AI-powered analytics platform featuring automated data processing, intelligent visualization, predictive modeling, and natural language insights generation. The platform includes real-time dashboards, automated anomaly detection, and AI-generated executive summaries.",
+      impact: "Reduced reporting time by 75%, improved decision accuracy by 60%, and enabled real-time insights for 50+ enterprise clients. The AI summary feature processes complex datasets and generates actionable recommendations, saving executives 10+ hours per week on data analysis."
+    },
+    {
+      id: 2,
       title: "Major Airlines Mobile App",
       category: "Travel & Aviation",
       description: "Redesigned the core reservation platform and mobile app for a leading airline, delivering a seamless booking and travel experience.",
@@ -137,7 +152,7 @@ const Index = () => {
       impact: "Increased mobile bookings by 45%, reduced customer service calls by 30%, and improved user satisfaction scores by 60%."
     },
     {
-      id: 2,
+      id: 3,
       title: "AI Insights Insurance Platform",
       category: "Insurance Technology",
       description: "Enterprise AI platform providing predictive analytics and risk assessment for insurance leaders.",
@@ -153,7 +168,7 @@ const Index = () => {
       impact: "Reduced claim processing time by 50% and improved risk prediction accuracy by 75%. Deployed across 10+ major insurance firms."
     },
     {
-      id: 3,
+      id: 4,
       title: "Banking Integration Management",
       category: "Financial Technology",
       description: "Comprehensive banking platform for account and integration management with real-time analytics.",
@@ -169,7 +184,7 @@ const Index = () => {
       impact: "Reduced processing errors by 60% and improved integration efficiency by 80%. Deployed at 15+ financial institutions."
     },
     {
-      id: 4,
+      id: 5,
       title: "Entertainment Platform UX (Salesforce + Skuid)",
       category: "Entertainment & Media",
       description: "Product experience design for a major entertainment client, integrating Salesforce and Skuid for seamless UX.",
@@ -185,7 +200,7 @@ const Index = () => {
       impact: "Increased user engagement by 55% and improved customer lifetime value by 35%."
     },
     {
-      id: 5,
+      id: 6,
       title: "Salesforce Design System & Team Mentorship",
       category: "Enterprise UX",
       description: "Led Salesforce design system strategy, mentored 8 designers/developers, and delivered a winning product.",
@@ -201,7 +216,7 @@ const Index = () => {
       impact: "Achieved stakeholder alignment, accelerated delivery, and set a new standard for internal design systems."
     },
     {
-      id: 6,
+      id: 7,
       title: "TravelMate AI - Hackathon Winner",
       category: "Travel App - Winner",
       description: "Generative AI-powered travel companion that won the Design Hackathon with personalized itineraries.",
@@ -217,7 +232,7 @@ const Index = () => {
       impact: "Won Generative AI Design Hackathon. Prototype tested with 500+ users showing 80% satisfaction rate and 40% reduction in planning time."
     },
     {
-      id: 7,
+      id: 8,
       title: "Metaverse Spaces & Personal Portfolio",
       category: "Metaverse & Personal Branding",
       description: "Exploring immersive metaverse spaces and building a personal portfolio with cutting-edge web and AI tech.",
@@ -233,7 +248,7 @@ const Index = () => {
       impact: "Increased portfolio engagement by 70% and attracted new collaboration opportunities."
     },
     {
-      id: 8,
+      id: 9,
       title: "Process Alignment Workshop & Unified Product Experience",
       category: "Enterprise Collaboration",
       description: "Led process alignment workshops across 11+ internal teams, consolidating insights and unifying product experiences for greater efficiency.",
@@ -249,7 +264,7 @@ const Index = () => {
       impact: "Streamlined collaboration, improved process efficiency, and delivered a cohesive product experience across the organization."
     },
     {
-      id: 9,
+      id: 10,
       title: "SAP Dashboard Experience & Product Envisioning",
       category: "Enterprise Software",
       description: "Designed a unified dashboard experience for SAP-based products, driving actionable insights and user-centric workflows.",

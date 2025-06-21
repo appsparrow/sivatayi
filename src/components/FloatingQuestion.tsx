@@ -34,13 +34,17 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
     const newX = clientX - dragStart.x;
     const newY = clientY - dragStart.y;
     
-    // Constrain to viewport
-    const maxX = window.innerWidth - 350; // Modal width
-    const maxY = window.innerHeight - 400; // Modal height
+    // Constrain to viewport - make responsive based on screen size
+    const isMobile = window.innerWidth <= 768;
+    const modalWidth = isMobile ? Math.min(350, window.innerWidth - 40) : 400;
+    const modalHeight = isMobile ? 300 : 400;
+    
+    const maxX = window.innerWidth - modalWidth;
+    const maxY = window.innerHeight - modalHeight;
     
     setDragPosition({
-      x: Math.max(-200, Math.min(maxX, newX)),
-      y: Math.max(-100, Math.min(maxY, newY))
+      x: Math.max(-50, Math.min(maxX, newX)),
+      y: Math.max(-50, Math.min(maxY, newY))
     });
   };
 
@@ -65,18 +69,23 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
   // Touch events for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const touch = e.touches[0];
     handleDragStart(touch.clientX, touch.clientY);
   };
 
   const handleTouchMove = (e: TouchEvent) => {
     e.preventDefault();
-    const touch = e.touches[0];
-    handleDragMove(touch.clientX, touch.clientY);
+    e.stopPropagation();
+    if (e.touches.length > 0) {
+      const touch = e.touches[0];
+      handleDragMove(touch.clientX, touch.clientY);
+    }
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     handleDragEnd();
   };
 
@@ -96,6 +105,23 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
       };
     }
   }, [isDragging, dragStart]);
+
+  // Reset position to center on mobile when modal opens
+  useEffect(() => {
+    if (isActive) {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        // Force center the modal on mobile - override any previous drag position
+        setDragPosition({
+          x: 0,
+          y: 0
+        });
+      } else {
+        // Reset to default position on desktop
+        setDragPosition({ x: 0, y: 0 });
+      }
+    }
+  }, [isActive]);
 
   const handleClick = (e: any) => {
     // Only trigger click if not dragging
@@ -145,16 +171,14 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
             {isActive && (
               <div
                 ref={modalRef}
-                className="floating-popup-modal fixed"
+                className="floating-popup-modal"
                 style={{
-                  transform: `translate(${dragPosition.x}px, ${dragPosition.y}px)`,
-                  zIndex: 99999,
-                  cursor: isDragging ? 'grabbing' : 'grab',
+                  left: window.innerWidth <= 768 ? undefined : `calc(50% + ${dragPosition.x}px)`,
+                  top: window.innerWidth <= 768 ? undefined : `calc(50% + ${dragPosition.y}px)`,
+                  transform: window.innerWidth <= 768 ? undefined : 'translate(-50%, -50%)',
                   userSelect: 'none',
                   touchAction: 'none'
                 }}
-                onMouseDown={handleMouseDown}
-                onTouchStart={handleTouchStart}
               >
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8, y: 10 }}
@@ -165,25 +189,44 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                   }}
                   exit={{ opacity: 0, scale: 0.8, y: 10 }}
                   transition={{ duration: 0.2 }}
+                  className="w-full max-w-sm md:max-w-md lg:max-w-lg"
                 >
                   <Card className={`${
                     colorScheme === 'liquidglass' 
                       ? 'glass-card' 
                       : 'bg-white/95 backdrop-blur-sm'
-                  } shadow-2xl border-0 select-none`}
+                  } shadow-2xl border-0 select-none w-full min-w-[320px] max-w-[400px]`}
                   style={{ 
                     touchAction: 'none',
                     userSelect: 'none',
                     WebkitUserSelect: 'none',
                     WebkitTouchCallout: 'none'
                   }}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between mb-3">
-                        <h3 className={`font-semibold text-sm leading-tight flex-1 pr-2 ${
-                          colorScheme === 'liquidglass' ? 'text-white glass-text' : 'text-gray-900'
-                        }`}>
-                          {question}
-                        </h3>
+                    <CardContent className="p-5 md:p-6">
+                      <div 
+                        className="flex items-start justify-between mb-4 cursor-move"
+                        onMouseDown={handleMouseDown}
+                        onTouchStart={handleTouchStart}
+                        style={{ 
+                          touchAction: 'none', 
+                          userSelect: 'none',
+                          cursor: isDragging ? 'grabbing' : 'grab'
+                        }}
+                      >
+                        <div className="flex items-start flex-1 pr-3">
+                          <div className={`mr-2 mt-1 flex flex-col gap-0.5 ${
+                            colorScheme === 'liquidglass' ? 'opacity-50' : 'opacity-40'
+                          }`}>
+                            <div className="w-1 h-1 bg-current rounded-full"></div>
+                            <div className="w-1 h-1 bg-current rounded-full"></div>
+                            <div className="w-1 h-1 bg-current rounded-full"></div>
+                          </div>
+                          <h3 className={`font-semibold text-base md:text-lg leading-tight ${
+                            colorScheme === 'liquidglass' ? 'text-white glass-text' : 'text-gray-900'
+                          }`}>
+                            {question}
+                          </h3>
+                        </div>
                         <button 
                           onClick={(e) => {
                             e.stopPropagation();
@@ -193,18 +236,18 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                             e.stopPropagation();
                             onClick();
                           }}
-                          className={`flex-shrink-0 p-1 rounded-full transition-colors ${
+                          className={`flex-shrink-0 p-2 rounded-full transition-colors ${
                             colorScheme === 'liquidglass' 
                               ? 'hover:bg-white/20 text-white/80 hover:text-white' 
                               : 'hover:bg-gray-100 text-gray-500'
                           }`}
                           style={{ touchAction: 'manipulation' }}
                         >
-                          <X className="h-4 w-4" />
+                          <X className="h-5 w-5" />
                         </button>
                       </div>
-                      <p className={`text-sm leading-relaxed ${
-                        colorScheme === 'liquidglass' ? 'text-white/90 glass-text' : 'text-gray-700'
+                      <p className={`text-sm md:text-base leading-relaxed ${
+                        colorScheme === 'liquidglass' ? 'text-white/90' : 'text-gray-700'
                       }`}>
                         {answer}
                       </p>
