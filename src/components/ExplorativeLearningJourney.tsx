@@ -135,7 +135,7 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
               variant="secondary"
               className={`px-4 py-2 cursor-pointer transition-all duration-200 ${
                 colorScheme === 'liquidglass' 
-                  ? getPastelGlassColor(category.name)
+                  ? getPastelGlassColor(category.name) + ' hover:bg-white/20 hover:border-white/40'
                   : category.color
               } ${
                 colorScheme === 'liquidglass' ? 'text-white font-medium' : 'text-white'
@@ -182,7 +182,7 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
         {colorScheme === 'liquidglass' ? (
           <button
             onClick={() => setShowAllCourses(true)}
-            className="bg-white/10 hover:bg-white/15 border border-white/30 text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto"
+            className="bg-white/10 hover:bg-white/15 border border-white/30 hover:border-white/40 text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto hover:shadow-lg"
           >
             <ExternalLink className="h-4 w-4" />
             Learning Updates

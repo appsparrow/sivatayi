@@ -7,6 +7,71 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true // Note: In production, you should use a backend API
 });
 
+// Cache for common questions to save API calls
+const CACHED_RESPONSES = {
+  "tell me about your ai expertise": "I have extensive experience building AI-first products over 22+ years, specializing in designing interfaces for ML systems, LLMs, and conversational AI. I've created user-friendly interfaces for complex AI systems across fintech, healthcare, and insurance applications. My approach focuses on making AI transparent and trustworthy while augmenting human creativity rather than replacing it.",
+  
+  "what's your design philosophy": "My approach is rooted in human-centered design, blending empathy with the power of AI and 'vibe coding' to turn ideas into products that truly resonate with users and are ready for the market. I believe in designing with code, using data-driven decisions enhanced by user empathy, and creating accessible, inclusive experiences.",
+  
+  "how do you bring ideas to products": "I follow a systematic Ideate → Strategize → Launch methodology. I start with deep user research, prototype rapidly with code, iterate based on feedback, and deliver market-ready products. I've successfully brought 24 ideas from concept to marketable products using this approach combined with AI-first thinking.",
+  
+  "what's your design process": "Every project starts with understanding people. Even as AI evolves, I believe we're designing for humans first. My process is simple: Ideate → Strategize → Launch. I begin with user research, prototype with 'vibe coding', and deliver working products through a systematic, iterative approach.",
+  
+  "what else can you do besides work": "I'm a creative artist exploring various forms, outdoor enthusiast passionate about hiking and motorcycle riding, and a home improvement expert who's completed tons of DIY projects. I also use AI for social media content creation and apply design thinking to everyday life challenges. I love adventure and continuously experiment with new tools and approaches!",
+  
+  "what technologies do you understand": "I specialize in Product Design Strategy with strong understanding of React, TypeScript, Tailwind CSS, and Salesforce capabilities. My design process is powered by Figma, Miro, FigJam, and AI-driven design platforms. I also have experience with AI/ML systems, cloud platforms, and full-stack development to craft seamless digital experiences.",
+  
+  "tell me about your learning journey": "I invest an average of 350 hours per year in continuous learning through courses, experiment-based learning, and systematic implementation. I have 255+ Salesforce badges, 99 LinkedIn Learning courses, and multiple certifications across Microsoft and SAP. I believe in reinforcing knowledge through practical application and 'learning by doing'."
+};
+
+// Function to check if a question matches cached responses
+function getCachedResponse(question: string): string | null {
+  const normalizedQuestion = question.toLowerCase().trim();
+  
+  // Check for exact matches first
+  if (CACHED_RESPONSES[normalizedQuestion]) {
+    return CACHED_RESPONSES[normalizedQuestion];
+  }
+  
+  // Check for partial matches
+  for (const [cachedQuestion, response] of Object.entries(CACHED_RESPONSES)) {
+    if (normalizedQuestion.includes(cachedQuestion) || cachedQuestion.includes(normalizedQuestion)) {
+      return response;
+    }
+  }
+  
+  // Check for keyword matches
+  if (normalizedQuestion.includes('ai') && normalizedQuestion.includes('expertise')) {
+    return CACHED_RESPONSES["tell me about your ai expertise"];
+  }
+  
+  if (normalizedQuestion.includes('design') && normalizedQuestion.includes('philosophy')) {
+    return CACHED_RESPONSES["what's your design philosophy"];
+  }
+  
+  if (normalizedQuestion.includes('ideas') && normalizedQuestion.includes('product')) {
+    return CACHED_RESPONSES["how do you bring ideas to products"];
+  }
+  
+  if (normalizedQuestion.includes('process')) {
+    return CACHED_RESPONSES["what's your design process"];
+  }
+  
+  if (normalizedQuestion.includes('besides work') || normalizedQuestion.includes('outside work') || normalizedQuestion.includes('personal')) {
+    return CACHED_RESPONSES["what else can you do besides work"];
+  }
+  
+  if (normalizedQuestion.includes('technolog') || normalizedQuestion.includes('skills')) {
+    return CACHED_RESPONSES["what technologies do you understand"];
+  }
+  
+  if (normalizedQuestion.includes('learning') && normalizedQuestion.includes('journey')) {
+    return CACHED_RESPONSES["tell me about your learning journey"];
+  }
+  
+  return null;
+}
+
 // Enhanced portfolio context with more comprehensive information
 const portfolioContext = `
 You are an AI assistant representing Siva Tayi, a Design Director and AI-first product developer. Here's comprehensive information about Siva:
@@ -154,6 +219,15 @@ export class AIService {
     console.log('🔥 generateResponse called with:', userMessage);
     
     try {
+      // ⚡ CHECK CACHE FIRST to save API calls and tokens
+      const cachedResponse = getCachedResponse(userMessage);
+      if (cachedResponse) {
+        console.log('💾 Using cached response for question:', userMessage);
+        return cachedResponse;
+      }
+      
+      console.log('🌐 No cache hit, calling OpenAI API');
+      
       // Refresh content if not loaded yet
       if (!this.contentLoaded) {
         this.loadDynamicContent();

@@ -16,11 +16,11 @@ export const SimpleGlassDemo = () => {
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-8 relative overflow-hidden">
       {/* Mouse Glow Effect */}
       <div 
-        className="pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-3xl transition-all duration-300 ease-out"
+        className="pointer-events-none fixed w-40 h-40 rounded-full opacity-20 blur-2xl transition-all duration-300 ease-out"
         style={{
-          background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 40%, transparent 70%)',
-          left: mousePos.x - 192,
-          top: mousePos.y - 192,
+          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.86) 0%, rgba(255, 255, 255, 0.43) 80%, transparent 30%)',
+          left: mousePos.x - 120,
+          top: mousePos.y - 120,
         }}
       />
 

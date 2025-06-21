@@ -34,6 +34,19 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
+  // Listen for custom event to open chat
+  useEffect(() => {
+    const handleOpenChat = () => {
+      setIsOpen(true);
+      if (questionCount === 0) {
+        setShowSuggestions(true);
+      }
+    };
+
+    window.addEventListener('openAskMeAnything', handleOpenChat);
+    return () => window.removeEventListener('openAskMeAnything', handleOpenChat);
+  }, [questionCount]);
+
   const getColorClasses = () => {
     switch (colorScheme) {
       case 'sunset':
@@ -186,26 +199,28 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
 
   return (
     <>
-      {/* Chat Button - Bottom right, positioned above footer */}
-      <motion.button
-        onClick={handleOpenChat}
-        className={`fixed bottom-20 right-6 ${
-          colorScheme === 'liquidglass' 
-            ? 'bg-white/15 backdrop-blur-lg border-2 border-white/30 shadow-xl' 
-            : `bg-gradient-to-r ${colors.background}`
-        } text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-[10001] flex items-center gap-2`}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <MessageSquare className="h-6 w-6" />
-        <motion.div
-          className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
-          animate={{ scale: [1, 1.2, 1] }}
-          transition={{ duration: 2, repeat: Infinity }}
+      {/* Hidden floating button - replaced with simple text */}
+      <div style={{ display: 'none' }}>
+        <motion.button
+          onClick={handleOpenChat}
+          className={`fixed bottom-20 right-6 ${
+            colorScheme === 'liquidglass' 
+              ? 'bg-white/15 backdrop-blur-lg border-2 border-white/30 shadow-xl' 
+              : `bg-gradient-to-r ${colors.background}`
+          } text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-[10001] flex items-center gap-2`}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <Sparkles className="h-3 w-3" />
-        </motion.div>
-      </motion.button>
+          <MessageSquare className="h-6 w-6" />
+          <motion.div
+            className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <Sparkles className="h-3 w-3" />
+          </motion.div>
+        </motion.button>
+      </div>
 
       {/* Chat Sidebar - From right side, full height */}
       <AnimatePresence>

@@ -12,14 +12,29 @@ import Footer from '@/components/Footer';
 import GlassCard from '@/components/GlassCard';
 import GlassButton from '@/components/GlassButton';
 import AskMeAnything from '@/components/AskMeAnything';
+import ColorSchemeToggle from '@/components/ColorSchemeToggle';
+import StarFeedback from '@/components/StarFeedback';
 
 const Index = () => {
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
   const [showProjects, setShowProjects] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
-  const [colorScheme, setColorScheme] = useState('default');
+  const [colorScheme, setColorScheme] = useState('liquidglass');
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mouse tracking for glow effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
+
+    if (colorScheme === 'liquidglass') {
+      window.addEventListener('mousemove', handleMouseMove);
+      return () => window.removeEventListener('mousemove', handleMouseMove);
+    }
+  }, [colorScheme]);
 
   const scrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
@@ -257,8 +272,25 @@ const Index = () => {
 
   return (
     <div className={`min-h-screen ${colorScheme === 'liquidglass' ? 'liquid-glass-theme' : ''} ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`} ref={containerRef}>
-      {/* Liquid Glass Background */}
-      {colorScheme === 'liquidglass' && <div className="liquid-glass-background" />}
+      {/* Color Scheme Toggle in Top Right */}
+      <ColorSchemeToggle onSchemeChange={setColorScheme} />
+      
+      {/* Liquid Glass Background with Mouse Glow */}
+      {colorScheme === 'liquidglass' && (
+        <>
+          <div className="liquid-glass-background" />
+          <div 
+            className="pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-1xl ease-out z-0"
+            style={{
+              background: 'radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(168, 85, 247, 0.4) 50%, rgba(236, 72, 153, 0.2) 70%, transparent 25%)',
+              left: mousePos.x - 192,
+              top: mousePos.y - 192,
+              filter: 'blur(40px)',
+            }}
+          />
+          
+        </>
+      )}
       
       {/* Hero Section */}
       <section className="hero-section relative min-h-screen flex items-start justify-center overflow-hidden px-4 pt-8 sm:pt-16">
@@ -465,9 +497,89 @@ const Index = () => {
         </div>
       </section>
 
-      <Footer colorScheme={colorScheme} onSchemeChange={setColorScheme} />
+      {/* Star Feedback Section */}
+      <section className="py-12 px-6">
+        <div className="max-w-4xl mx-auto">
+          <StarFeedback 
+            colorScheme={colorScheme} 
+            onRatingChange={(rating) => console.log('Rating:', rating)}
+          />
+        </div>
+      </section>
 
-      {/* Ask Me Anything - AI-powered chat interface */}
+      <Footer colorScheme={colorScheme} />
+
+      {/* Ask Me Anything - Prominent Glass Button */}
+      <motion.div 
+        className="fixed bottom-6 right-6 z-[10001]"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 2, duration: 0.6, ease: "easeOut" }}
+      >
+        <motion.button
+          onClick={() => {
+            const event = new CustomEvent('openAskMeAnything');
+            window.dispatchEvent(event);
+          }}
+          className={`${
+            colorScheme === 'liquidglass' 
+              ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl' 
+              : colorScheme === 'professional'
+                ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50'
+                : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white'
+          } px-6 py-3 rounded-2xl transition-all duration-300 flex items-center gap-3 group`}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <motion.div
+            className={`${
+              colorScheme === 'liquidglass' 
+                ? 'text-white' 
+                : colorScheme === 'professional'
+                  ? 'text-blue-600'
+                  : 'text-blue-600'
+            }`}
+            animate={{ 
+              rotate: [0, 10, -10, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity,
+              repeatDelay: 3
+            }}
+          >
+            <MessageSquare className="h-5 w-5" />
+          </motion.div>
+          
+          <span className={`font-medium ${
+            colorScheme === 'liquidglass' 
+              ? 'text-white' 
+              : colorScheme === 'professional'
+                ? 'text-gray-800'
+                : 'text-gray-800'
+          } group-hover:translate-x-0.5 transition-transform duration-200`}>
+            Ask me anything
+          </span>
+          
+          {/* Animated glow effect for liquid glass */}
+          {colorScheme === 'liquidglass' && (
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-sm -z-10"
+              animate={{
+                opacity: [0.3, 0.6, 0.3],
+                scale: [1, 1.05, 1]
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          )}
+        </motion.button>
+      </motion.div>
+      
       <AskMeAnything colorScheme={colorScheme} />
 
       {/* Case Study Modal */}
