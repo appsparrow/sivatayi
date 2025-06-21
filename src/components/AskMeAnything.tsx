@@ -3,6 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, MessageSquare, User, Bot, Sparkles, AlertCircle, Loader2, X, ExternalLink, Linkedin, Twitter, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { aiService, ChatMessage } from '@/services/aiService';
+import UserGreeting from './UserGreeting';
+import { 
+  initializeUserSession, 
+  addQuestionToSession, 
+  hasReachedQuestionLimit, 
+  getRemainingQuestions,
+  commitUserSession,
+  setupAutoSave,
+  getUserSessionData
+} from '@/services/userSessionApi';
 
 interface AskMeAnythingProps {
   colorScheme?: string;
@@ -10,6 +20,8 @@ interface AskMeAnythingProps {
 
 const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [userName, setUserName] = useState<string | null>(null);
   const [questionCount, setQuestionCount] = useState(0);
   const [sessionExhausted, setSessionExhausted] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
@@ -20,7 +32,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: "Hi! I'm here to answer any questions about my experience, projects, or approach to design and development. What would you like to know?",
+      text: "Hi! I'm here to answer any questions about Siva's experience, projects, or approach to bring ideas to products. What would you like to know?",
       isUser: false,
       timestamp: new Date()
     }
@@ -34,18 +46,40 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
 
+  // Initialize session data and auto-save
+  useEffect(() => {
+    const currentSession = getUserSessionData();
+    if (currentSession) {
+      setUserName(currentSession.name);
+      setQuestionCount(currentSession.totalQuestions);
+      setSessionExhausted(hasReachedQuestionLimit());
+    }
+
+    // Setup auto-save triggers
+    const cleanup = setupAutoSave();
+    return cleanup;
+  }, []);
+
   // Listen for custom event to open chat
   useEffect(() => {
     const handleOpenChat = () => {
-      setIsOpen(true);
-      if (questionCount === 0) {
-        setShowSuggestions(true);
+      const currentSession = getUserSessionData();
+      
+      if (!currentSession) {
+        // First time user - show greeting popup
+        setShowGreeting(true);
+      } else {
+        // Returning user - open chat directly
+        setIsOpen(true);
+        if (currentSession.totalQuestions === 0) {
+          setShowSuggestions(true);
+        }
       }
     };
 
     window.addEventListener('openAskMeAnything', handleOpenChat);
     return () => window.removeEventListener('openAskMeAnything', handleOpenChat);
-  }, [questionCount]);
+  }, []);
 
   const getColorClasses = () => {
     switch (colorScheme) {
@@ -74,6 +108,29 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
 
   const colors = getColorClasses();
 
+  // Handle greeting completion
+  const handleGreetingComplete = (name: string) => {
+    setUserName(name);
+    setShowGreeting(false);
+    setIsOpen(true);
+    initializeUserSession(name);
+    
+    // Update welcome message with user's name
+    setMessages([{
+      id: '1',
+      text: `Hi ${name}! I'm here to answer any questions about Siva's experience, projects, or approach to bring ideas to products. What would you like to know?`,
+      isUser: false,
+      timestamp: new Date()
+    }]);
+  };
+
+  // Handle chat close with session saving
+  const handleCloseChat = async () => {
+    setIsOpen(false);
+    // Save session when closing chat
+    await commitUserSession();
+  };
+
   const handleSendMessage = async () => {
     console.log('🚀 handleSendMessage called with:', inputValue);
     
@@ -98,12 +155,15 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
     setIsLoading(true);
     setApiError(null);
     
-    const newQuestionCount = questionCount + 1;
-    setQuestionCount(newQuestionCount);
-    
-    // Check if this is the last question
-    if (newQuestionCount >= 3) {
-      setSessionExhausted(true);
+    // Add question to session tracking
+    const updatedSession = addQuestionToSession(messageText);
+    if (updatedSession) {
+      setQuestionCount(updatedSession.totalQuestions);
+      
+      // Check if this is the last question
+      if (updatedSession.totalQuestions >= 3) {
+        setSessionExhausted(true);
+      }
     }
 
     try {
@@ -140,10 +200,15 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
       setMessages(prev => [...prev, botResponse]);
       
       // Hide suggestions after first response, show prompts after first question (collapsed)
-      if (newQuestionCount === 1) {
+      if (questionCount === 1) {
         setShowSuggestions(false);
         setShowPrompts(true);
         setPromptsExpanded(false); // Keep prompts collapsed after first question
+      }
+      
+      // Auto-save session after 3rd question
+      if (questionCount >= 3) {
+        await commitUserSession();
       }
       
     } catch (error) {
@@ -268,12 +333,12 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                     <div>
                       <h3 className={`text-lg font-bold ${colorScheme === 'professional' ? 'text-gray-900' : 'text-white'}`}>Ask Me Anything</h3>
                       <p className={`text-xs ${colorScheme === 'professional' ? 'text-gray-600' : 'text-white/80'}`}>
-                        AI-powered showcase of thought process & leadership
+                        Human and OpenAI powered
                       </p>
                     </div>
                   </div>
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleCloseChat}
                     className={`p-2 rounded-lg transition-colors ${
                       colorScheme === 'liquidglass' 
                         ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white' 
@@ -304,9 +369,8 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                           ? 'text-gray-700'
                           : 'text-blue-200'
                     }`}>
-                      <strong>Note:</strong> This AI is trained on GPT models and responses might be inaccurate. 
-                      It's developed to showcase my thought process, limitations awareness, and thought leadership 
-                      in prototyping ideas with AI. You can ask up to 3 questions.
+                      <strong>Note:</strong> This AI is trained on GPT models and responses might be inaccurate.  
+                      This personal assistant is a beginning of my vision of how to seamlessly bring agents into human-s   interactions and some interesting conversational skills.
                     </p>
                     <button
                       onClick={() => setShowNote(false)}
@@ -592,6 +656,13 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
           </>
         )}
       </AnimatePresence>
+
+      {/* User Greeting Popup */}
+      <UserGreeting 
+        isOpen={showGreeting}
+        onComplete={handleGreetingComplete}
+        colorScheme={colorScheme}
+      />
     </>
   );
 };

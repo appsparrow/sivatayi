@@ -19,10 +19,10 @@ const CACHED_RESPONSES = {
   
   "what else can you do besides work": "I'm a creative artist exploring various forms, outdoor enthusiast passionate about hiking and motorcycle riding, and a home improvement expert who's completed tons of DIY projects. I also use AI for social media content creation and apply design thinking to everyday life challenges. I love adventure and continuously experiment with new tools and approaches!",
   
-  "what technologies do you understand": "I specialize in Product Design Strategy with strong understanding of React, TypeScript, Tailwind CSS, and Salesforce capabilities. My design process is powered by Figma, Miro, FigJam, and AI-driven design platforms. I also have experience with AI/ML systems, cloud platforms, and full-stack development to craft seamless digital experiences.",
+  "what technologies do you understand": "I specialize in  Human-centered design, keeping users at the center and leveraging AI to enhance the design process and experience. My design process is powered by Figma, Miro, FigJam, and AI-driven design platforms. I also have understanding of full-stack development and CRM systems Salesforce capabilities to craft seamless digital experiences.",
   
-  "tell me about your learning journey": "I invest an average of 350 hours per year in continuous learning through courses, experiment-based learning, and systematic implementation. I have 255+ Salesforce badges, 99 LinkedIn Learning courses, and multiple certifications across Microsoft and SAP. I believe in reinforcing knowledge through practical application and 'learning by doing'."
-};
+  "tell me about your learning journey": "After spending thousands of hours in explorative learning, I personally believe I believe in reinforcing knowledge through practical application and 'learning by doing'. I have 255+ Salesforce badges, 99 LinkedIn Learning courses, and multiple certifications across Microsoft and SAP."
+}
 
 // Function to check if a question matches cached responses
 function getCachedResponse(question: string): string | null {
