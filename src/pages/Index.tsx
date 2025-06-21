@@ -293,7 +293,7 @@ const Index = () => {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="mb-2"
             >
-              <h1 className={`text-2xl md:text-3xl font-light bg-gradient-to-r ${colors.text} bg-clip-text text-transparent mb-1 sm:mb-2`}>
+              <h1 className={`text-4xl md:text-3xl font-thin bg-gradient-to-r ${colors.text} bg-clip-text text-transparent mb-1 sm:mb-2`}>
                 Siva Tayi
               </h1>
             </motion.div>
