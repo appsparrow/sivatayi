@@ -232,8 +232,8 @@
 
 /* Liquid glass background patterns */
 .liquid-glass-theme {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-image: url('/abstract1.png');
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url('/abstract1.png'); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -251,9 +251,9 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: scroll;
+  background-attachment: fixed;
   z-index: -1;
-  opacity: 0.9;
+  /* opacity: 0.9; */
 }
 
 .liquid-glass-background::before {
@@ -263,7 +263,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+  /* background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%); */
   z-index: 1;
 }
 
@@ -315,16 +315,19 @@
   /* Mobile liquid glass background optimization */
   .liquid-glass-theme {
     background-attachment: scroll !important;
-    background-size: cover !important;
-    background-position: center !important;
   }
   
   .liquid-glass-background {
     background-attachment: scroll !important;
     background-size: cover !important;
     background-position: center !important;
-    /* Reduce opacity slightly on mobile for better readability */
-    opacity: 0.85 !important;
+    /* Keep image but make it brighter on mobile */
+    opacity: 1 !important;
+  }
+  
+  /* Reduce dark overlay on mobile to keep background bright */
+  .liquid-glass-background::before {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
   }
   
   /* Enhanced glass effects for mobile with abstract background */
@@ -410,13 +413,23 @@
   .hero-section {
     padding-top: 1rem !important;
     margin-top: 0 !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
   }
   
   /* Force Siva Tayi closer to top */
   .hero-section .mb-2 {
-    margin-bottom: 0.5rem !important;
+    margin-bottom: 0.25rem !important;
     margin-top: 0 !important;
     padding-top: 0 !important;
+  }
+  
+  /* Tighter spacing for main heading on mobile */
+  .hero-section h2 {
+    margin-top: 4.5rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.24 !important;
+    font-size: 4rem;
   }
   
   /* Ensure mobile viewport doesn't have horizontal scroll */

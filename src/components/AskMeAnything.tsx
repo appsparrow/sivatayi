@@ -32,7 +32,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: '1',
-      text: "Hi! I'm here to answer any questions about Siva's experience, projects, or approach to bring ideas to products. What would you like to know?",
+      text: "Hi! I'm here to share some of my experience, projects, or approach to bring ideas to products. What would you like to know?",
       isUser: false,
       timestamp: new Date()
     }

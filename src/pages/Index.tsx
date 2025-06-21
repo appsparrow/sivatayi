@@ -293,7 +293,7 @@ const Index = () => {
       )}
       
       {/* Hero Section */}
-      <section className="hero-section relative min-h-screen flex items-start justify-center overflow-hidden px-4 pt-8 sm:pt-16">
+      <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden px-4 pt-4 sm:pt-16">
         <div className={`absolute inset-0 ${colorScheme === 'liquidglass' ? '' : colorScheme === 'professional' ? 'bg-gradient-to-r from-gray-200/20 to-gray-300/20' : 'bg-gradient-to-r from-blue-600/5 to-purple-600/5'}`} />
         
         {/* Floating Questions - Always visible, transparent on mobile */}
@@ -330,10 +330,10 @@ const Index = () => {
               </h1>
             </motion.div>
 
-            <h2 className={`text-5xl md:text-7xl lg:text-9xl xl:text-[10rem] 2xl:text-[12rem] font-bold mb-6 mt-2 sm:mt-8 ${
+            <h2 className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold mb-4 sm:mb-6 mt-1 sm:mt-8 leading-[0.9] sm:leading-tight ${
               colorScheme === 'liquidglass' 
-                ? 'glass-text leading-tight text-shadow-lg' 
-                : `bg-gradient-to-r ${colors.text} bg-clip-text text-transparent leading-tight`
+                ? 'glass-text text-shadow-lg' 
+                : `bg-gradient-to-r ${colors.text} bg-clip-text text-transparent`
             }`}>
               Ideate.<br />Strategize.<br />Launch.
             </h2>
