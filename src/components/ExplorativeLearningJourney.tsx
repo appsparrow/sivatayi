@@ -154,21 +154,37 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
       <AnimatePresence>
         {selectedCategory && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ 
+              opacity: 1, 
+              y: 0, 
+              scale: 1,
+              transition: {
+                type: "spring",
+                stiffness: 300,
+                damping: 20,
+                duration: 0.4
+              }
+            }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
             className="text-center"
           >
             <Card className={`max-w-2xl mx-auto ${
-              colorScheme === 'dark' ? 'bg-gray-800/80 border-gray-700' : ''
-            }`}>
-              <CardContent className="p-6">
-                <h3 className={`text-xl font-bold mb-2 ${
-                  colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+              colorScheme === 'liquidglass' 
+                ? 'bg-white/10 backdrop-blur-xl border-0 shadow-2xl' 
+                : colorScheme === 'dark' 
+                  ? 'bg-gray-800/80 border-gray-700' 
+                  : 'bg-white/90 backdrop-blur-sm border border-gray-100 shadow-lg'
+            } rounded-3xl`}>
+              <CardContent className="p-8">
+                <h3 className={`text-xl font-bold mb-4 ${
+                  colorScheme === 'liquidglass' ? 'text-white' : colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
                   {selectedCategory}
                 </h3>
-                <p className={`${colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`text-base leading-relaxed ${
+                  colorScheme === 'liquidglass' ? 'text-white/80' : colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   {categories.find(c => c.name === selectedCategory)?.description}
                 </p>
               </CardContent>

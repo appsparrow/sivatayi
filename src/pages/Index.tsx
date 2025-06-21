@@ -122,7 +122,7 @@ const Index = () => {
   const projects = [
     {
       id: 1,
-      title: "Major Airlines Company Mobile & Reservation Platform",
+      title: "Major Airlines Mobile App",
       category: "Travel & Aviation",
       description: "Redesigned the core reservation platform and mobile app for a leading airline, delivering a seamless booking and travel experience.",
       image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=600&fit=crop",
@@ -482,17 +482,45 @@ const Index = () => {
             <p className={`text-lg md:text-xl mb-8 ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mx-auto`}>
               Let's discuss how my strategic design leadership and AI-first approach can deliver market-winning results.
             </p>
-            {colorScheme === 'liquidglass' ? (
-              <GlassButton size="lg" className="px-12 py-4">
-                Get In Touch
-              </GlassButton>
-            ) : (
-            <Button size="lg" className={`px-12 py-4 text-lg bg-gradient-to-r ${colors.accent} hover:opacity-90 text-white ${
-              colorScheme === 'professional' ? 'shadow-sm' : ''
-            }`}>
-              Get In Touch
-            </Button>
-            )}
+            
+            {/* Social Media Links */}
+            <div className="flex items-center justify-center gap-6">
+              {/* LinkedIn */}
+              <a
+                href="https://www.linkedin.com/in/siva-tayi/" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${
+                  colorScheme === 'liquidglass' 
+                    ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl text-white' 
+                    : colorScheme === 'professional'
+                      ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
+                      : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
+                } p-4 rounded-2xl transition-all duration-300 group hover:scale-105`}
+              >
+                <svg className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+
+              {/* Twitter X */}
+              <a
+                href="https://x.com/siva_tayi" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${
+                  colorScheme === 'liquidglass' 
+                    ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl text-white' 
+                    : colorScheme === 'professional'
+                      ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
+                      : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
+                } p-4 rounded-2xl transition-all duration-300 group hover:scale-105`}
+              >
+                <svg className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
+                </svg>
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

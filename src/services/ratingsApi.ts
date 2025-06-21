@@ -5,7 +5,7 @@ interface RatingData {
   sessionId: string;
 }
 
-const API_ENDPOINT = 'https://sivatayi.com/ratings-api.php'; // Add your PHP server endpoint here (e.g., 'https://yourserver.com/ratings-api.php')
+const API_ENDPOINT = 'https://calculatorsplus.com/ratings-api.php'; // Add your PHP server endpoint here (e.g., 'https://yourserver.com/ratings-api.php')
 
 export const sendRatingToServer = async (ratingData: RatingData): Promise<boolean> => {
   // If no API endpoint is configured, fall back to localStorage only
