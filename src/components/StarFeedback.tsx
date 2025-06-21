@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star } from 'lucide-react';
+import { sendRatingToServer, isApiConfigured } from '../services/ratingsApi';
 
 interface StarFeedbackProps {
   colorScheme?: string;
@@ -7,7 +8,7 @@ interface StarFeedbackProps {
 }
 
 // Analytics functions
-const saveRating = (rating: number) => {
+const saveRating = async (rating: number) => {
   const timestamp = new Date().toISOString();
   const ratingData = {
     rating,
@@ -15,13 +16,24 @@ const saveRating = (rating: number) => {
     sessionId: getSessionId()
   };
   
-  // Save to localStorage
+  // Always save to localStorage as backup
   const existingRatings = JSON.parse(localStorage.getItem('portfolioRatings') || '[]');
   existingRatings.push(ratingData);
   localStorage.setItem('portfolioRatings', JSON.stringify(existingRatings));
   
-  console.log('⭐ Rating saved:', ratingData);
-  console.log('📊 All ratings:', existingRatings);
+  console.log('⭐ Rating saved locally:', ratingData);
+  
+  // Try to send to server if API is configured
+  if (isApiConfigured()) {
+    const serverSuccess = await sendRatingToServer(ratingData);
+    if (serverSuccess) {
+      console.log('🌐 Rating also sent to server');
+    } else {
+      console.log('📱 Rating saved locally only (server unavailable)');
+    }
+  }
+  
+  console.log('📊 All local ratings:', existingRatings);
 };
 
 const getSessionId = () => {
@@ -70,7 +82,7 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
   }, []);
 
   const feedbackMessages = {
-    0: "How would you rate Siva's portfolio?",
+    0: "Rate this portfolio",
     1: "😞 Not impressed? Let's see what we can improve!",
     2: "🤔 Getting better, but room for improvement!",
     3: "😊 Good work! What could make it great?",
@@ -78,22 +90,26 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
     5: "🚀 Absolutely amazing! You're blown away!"
   };
 
-  const handleStarClick = (starRating: number) => {
+  const handleStarClick = async (starRating: number) => {
+    if (hasRated) return; // Prevent multiple submissions
+    
     setRating(starRating);
     setHasRated(true);
     
     // Save rating
-    saveRating(starRating);
+    await saveRating(starRating);
     sessionStorage.setItem('currentSessionRating', starRating.toString());
     
     onRatingChange?.(starRating);
   };
 
   const handleStarHover = (starRating: number) => {
+    if (hasRated) return; // Don't show hover effects after rating
     setHoverRating(starRating);
   };
 
   const handleStarLeave = () => {
+    if (hasRated) return;
     setHoverRating(0);
   };
 
@@ -117,43 +133,42 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
 
   const getTextColor = () => {
     if (colorScheme === 'liquidglass') {
-      return 'text-white';
+      return 'text-white/90';
     } else if (colorScheme === 'professional') {
-      return 'text-gray-800';
-    } else {
       return 'text-gray-700';
+    } else {
+      return 'text-gray-600';
     }
   };
 
   const getCardStyle = () => {
     if (colorScheme === 'liquidglass') {
-      return 'bg-white/10 backdrop-blur-lg border border-white/20 shadow-lg';
+      return 'bg-white/5 backdrop-blur-md border border-white/10 shadow-md';
     } else if (colorScheme === 'professional') {
-      return 'bg-white border border-gray-200 shadow-sm';
+      return 'bg-white border border-gray-100 shadow-sm';
     } else {
-      return 'bg-white/90 border border-gray-200 shadow-md';
+      return 'bg-white/80 border border-gray-100 shadow-sm';
     }
   };
 
   return (
-    <div className={`${getCardStyle()} rounded-2xl p-6 max-w-md mx-auto transition-all duration-300`}>
+    <div className={`${getCardStyle()} rounded-xl p-4 max-w-xs mx-auto transition-all duration-300`}>
       <div className="text-center">
-        <h3 className={`text-lg font-semibold mb-4 ${getTextColor()}`}>
-          Portfolio Feedback
-        </h3>
-        
         {/* Stars */}
-        <div className="flex justify-center gap-1 mb-4">
+        <div className="flex justify-center gap-1 mb-3">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
               onClick={() => handleStarClick(star)}
               onMouseEnter={() => handleStarHover(star)}
               onMouseLeave={handleStarLeave}
-              className="p-1 transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-300 rounded"
+              disabled={hasRated}
+              className={`p-1 transition-all duration-200 focus:outline-none rounded ${
+                hasRated ? 'cursor-default' : 'hover:scale-110 focus:ring-2 focus:ring-blue-300'
+              }`}
             >
               <Star 
-                className={`w-8 h-8 transition-colors duration-200 ${getStarColor(star)} ${
+                className={`w-6 h-6 transition-colors duration-200 ${getStarColor(star)} ${
                   star <= (hoverRating || rating) ? 'fill-current' : ''
                 }`}
               />
@@ -161,48 +176,12 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
           ))}
         </div>
 
-        {/* Dynamic Feedback Text */}
-        <div className="min-h-[3rem] flex items-center justify-center">
-          <p className={`text-center transition-all duration-300 ${getTextColor()} ${
-            rating > 0 ? 'animate-pulse' : ''
-          }`}>
-            {feedbackMessages[hoverRating || rating]}
+        {/* Feedback Text */}
+        <div className="min-h-[2rem] flex items-center justify-center">
+          <p className={`text-sm text-center transition-all duration-300 ${getTextColor()}`}>
+            {hasRated ? "✓ You have submitted" : (feedbackMessages[hoverRating || rating])}
           </p>
         </div>
-
-        {/* Rating Display */}
-        {rating > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200/30">
-            <div className={`text-sm ${getTextColor()} opacity-80`}>
-              Your Rating: <span className="font-bold text-yellow-500">{rating}/5 stars</span>
-            </div>
-          </div>
-        )}
-
-        {/* Additional Actions */}
-        {rating >= 4 && (
-          <div className="mt-4 space-y-2">
-            <p className={`text-sm ${getTextColor()} opacity-90`}>
-              Love the portfolio? 
-            </p>
-            <div className="flex gap-2 justify-center">
-              <button className={`px-4 py-2 text-xs rounded-lg transition-colors ${
-                colorScheme === 'liquidglass' 
-                  ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30' 
-                  : 'bg-blue-100 hover:bg-blue-200 text-blue-700'
-              }`}>
-                Share
-              </button>
-              <button className={`px-4 py-2 text-xs rounded-lg transition-colors ${
-                colorScheme === 'liquidglass' 
-                  ? 'bg-white/20 hover:bg-white/30 text-white border border-white/30' 
-                  : 'bg-green-100 hover:bg-green-200 text-green-700'
-              }`}>
-                Contact Siva
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

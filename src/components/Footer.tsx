@@ -46,7 +46,7 @@ const Footer = ({ colorScheme }: FooterProps) => {
                 ? 'text-gray-500' 
                 : 'text-gray-500'
           }`}>
-            <span>Powered by React, TypeScript & Tailwind CSS</span>
+            <span>Directed by real human </span>
           </div>
         </div>
       </div>

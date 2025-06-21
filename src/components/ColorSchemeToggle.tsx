@@ -37,13 +37,12 @@ const ColorSchemeToggle = ({ onSchemeChange }: ColorSchemeToggleProps) => {
     <div className="fixed top-4 right-4 z-50">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-12 h-12 p-0 bg-gray-900/80 backdrop-blur-lg border border-gray-700/50 hover:bg-gray-800/90 hover:border-gray-600 transition-all duration-200 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl"
       >
-        <Palette className="h-5 w-5 text-white drop-shadow-sm" />
+        <Palette className="h-5 w-5 text-gray-500 drop-shadow-sm" />
       </button>
       
       {isOpen && (
-        <div className="absolute top-14 right-0 bg-gray-900/90 backdrop-blur-lg border border-gray-700/50 shadow-xl rounded-xl p-3">
+        <div className="absolute top-10 right-0  backdrop-blur-lg border border-gray-100/50  shadow-xl rounded-xl p-3">
           <div className="flex gap-2">
             {colorSchemes.map((scheme) => (
               <button
