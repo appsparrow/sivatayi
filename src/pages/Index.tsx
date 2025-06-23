@@ -131,7 +131,8 @@ const Index = () => {
       image: "/project-images/stp-insights01.png",
       images: [
         "/project-images/stp-insights01.png",
-        "/project-images/stp-insights02.png"
+        "/project-images/stp-insights02.png",
+        "/project-images/stp-insights03.png"
       ],
       tags: ["AI/ML", "Data Visualization", "Enterprise Analytics"],
       problem: "Organizations struggled with fragmented data sources, manual reporting processes, and lack of actionable insights from complex datasets, leading to delayed decision-making and missed opportunities.",
@@ -157,21 +158,20 @@ const Index = () => {
     },
     {
       id: 3,
-      title: "Process Alignment Workshop & Unified Product Experience",
-      category: "Enterprise Collaboration",
-      description: "Led process alignment workshops across 11+ internal teams, consolidating insights and unifying product experiences for greater efficiency.",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=600&fit=crop",
-      images: [
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop"
-      ],
-      tags: ["Process Design", "Workshops", "Enterprise UX"],
-      problem: "Disparate teams with unique processes led to misalignment, inefficiencies, and inconsistent product experiences.",
-      solution: "Facilitated cross-team workshops, gathered process insights, and established a unified, user-centered design process.",
-      impact: "Streamlined collaboration, improved process efficiency, and delivered a cohesive product experience across the organization."
-    }
-  ];
+      title: "Design Discovery Workshop",
+  category: "Design Thinking & User Research",
+  description: "Conducted a Hyper Design Workshop after multi-user discovery interviews, mapping user needs, pain points, and daily workflows to inform dashboard and visual design solutions.",
+  image: "/project-images/portfolio-hyper-discovery.png",
+  images: [
+    "/project-images/portfolio-hyper-discovery.png"
+  ],
+  tags: ["Design Workshop", "User Research", "Design Thinking", "Dashboard Design"],
+  problem: "Lack of deep user understanding led to unclear requirements and misaligned dashboard features.",
+  solution: "Facilitated interactive workshops to capture day-in-the-life scenarios, analyze user pain points, and co-create dashboard and visual design concepts.",
+  impact: "Generated actionable insights, aligned design direction with real user needs, and delivered data-driven dashboard and visual design solutions."
+  },
+  
+];
 
   // Slim project cards data for quick overview
   const slimProjects = [
@@ -211,9 +211,9 @@ const Index = () => {
       tags: ["Entertainment", "Salesforce", "Product UX"]
     },
     {
-      title: "Custom CRM for Escalation Management",
-      description: "Designed a Salesforce-based custom CRM interface for largest technology company, optimizing escalation management and case resolution.",
-      tags: ["Salesforce", "CRM", "Escalation Management"]
+      title: "AI-Driven Product Development from Idea to Launch",
+      description: "Transformed a product idea into a deployed React app by conducting user interviews, leveraging AI for research analysis, rapid prototyping with Vibe Coding, and iterative user testing.",
+      tags: ["AI Research", "User Interviews", "Prototyping", "React", "Vibe Coding", "Product Launch"]
     },
     {
       title: "Major Airlines Mobile App Redesign",
@@ -347,15 +347,19 @@ const Index = () => {
               Ideate.<br />Strategize.<br />Launch.
             </h2>
 
-            <p className={`text-lg md:text-xl mb-4 leading-relaxed ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mx-auto`}>
-              Transforming vision into market-leading products through human-centered design, AI-driven innovation, and strategic leadership.
+            
+            <p className={`text-lg md:text-xl mb-4 leading-relaxed ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mb-20 mt- mx-auto`}>
+            The future of product and design is not human or AI—it’s human with AI. 
+            <br />I am geared to build organizations where designers, technologists, and AI agents co-create, learn from each other, and deliver outcomes neither could achieve alone.
             </p>
-            <p className={`text-lg md:text-xl font-semibold mb-8 ${
+
+            
+            <p className={`text-lg md:text-xl font-semibold mb-20 ${
               colorScheme === 'liquidglass' 
                 ? 'text-white text-shadow-lg' 
                 : `bg-gradient-to-r ${colors.accent} bg-clip-text text-transparent`
             }`}>
-              Strategic Design Director • AI-First Product Strategist • Idea to Product Delivery Expert
+              Human-Centered Design • AI-First Product Strategy • Idea to Product Delivery 
             </p>
             <motion.div
               initial={{ opacity: 0 }}
@@ -365,7 +369,7 @@ const Index = () => {
             >
               {colorScheme === 'liquidglass' ? (
                 <GlassButton size="lg" className="w-full sm:w-auto" onClick={scrollToProjects}>
-                  View My Work
+                  What I have been up to
                 </GlassButton>
               ) : (
               <Button size="lg" className={`w-full sm:w-auto px-8 py-4 text-lg bg-gradient-to-r ${colors.accent} hover:opacity-90 ${
@@ -424,7 +428,7 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`}>
-              Featured Projects
+              Recent Projects
             </h2>
             <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
               From concept to market: How I bring ideas to life through strategic design, 
