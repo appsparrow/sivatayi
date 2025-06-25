@@ -1117,3 +1117,8 @@ button:has(.liquidgood-glass-content) .liquidgood-glass-filter {
   filter: url(#liquidgood-dist-sidebar);
 }
 
+/* UserGreeting glass filter */
+.liquidgood-glass-card:has(svg filter[id*="greeting"]) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-greeting);
+}
+

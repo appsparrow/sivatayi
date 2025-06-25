@@ -431,7 +431,7 @@ IMPORTANT: Keep your response concise and to the point.`;
     }
     
     // General fallback with invitation to continue
-    return "That's an interesting question! While I'd love to share more specific insights about that topic, let's continue our conversation - I'm happy to dive deeper into any aspect of design, AI, or product development that interests you.";
+    return "While I'd love to share more specific insights about that topic, let's continue our conversation - I'm happy to dive deeper into any aspect of design, AI, or product development that interests you.";
   }
 
   // Method to add custom context for specific topics
