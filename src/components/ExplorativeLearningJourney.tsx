@@ -26,7 +26,7 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
   const [showAllCourses, setShowAllCourses] = useState(false);
 
   const getPastelGlassColor = (categoryName: string) => {
-    const baseGlass = 'liquid-glass-pill';
+    const baseGlass = colorScheme === 'liquidgood' ? 'liquidgood-glass-pill' : 'liquid-glass-pill';
     
     switch (categoryName) {
       case 'AI & Machine Learning':
@@ -136,9 +136,11 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
               className={`px-4 py-2 cursor-pointer transition-all duration-200 ${
                 colorScheme === 'liquidglass' 
                   ? getPastelGlassColor(category.name) + ' hover:bg-white/20 hover:border-white/40'
-                  : category.color
+                  : colorScheme === 'liquidgood'
+                    ? 'liquidgood-glass-pill hover:bg-white/20 hover:border-white/40'
+                    : category.color
               } ${
-                colorScheme === 'liquidglass' ? 'text-white font-medium' : 'text-white'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white font-medium' : 'text-white'
               } hover:shadow-lg ${
                 selectedCategory === category.name ? 'ring-2 ring-white shadow-lg' : ''
               }`}
@@ -170,7 +172,7 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
             className="text-center"
           >
             <Card className={`max-w-2xl mx-auto ${
-              colorScheme === 'liquidglass' 
+              colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                 ? 'bg-white/10 backdrop-blur-xl border-0 shadow-2xl' 
                 : colorScheme === 'dark' 
                   ? 'bg-gray-800/80 border-gray-700' 
@@ -178,12 +180,12 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
             } rounded-3xl`}>
               <CardContent className="p-8">
                 <h3 className={`text-xl font-bold mb-4 ${
-                  colorScheme === 'liquidglass' ? 'text-white' : colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                  colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white' : colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
                 }`}>
                   {selectedCategory}
                 </h3>
                 <p className={`text-base leading-relaxed ${
-                  colorScheme === 'liquidglass' ? 'text-white/80' : colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                  colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white/80' : colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
                 }`}>
                   {categories.find(c => c.name === selectedCategory)?.description}
                 </p>
@@ -195,10 +197,12 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
 
       {/* View All Button */}
       <div className="text-center">
-        {colorScheme === 'liquidglass' ? (
+        {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
           <button
             onClick={() => setShowAllCourses(true)}
-            className="bg-white/10 hover:bg-white/15 border border-white/30 hover:border-white/40 text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto hover:shadow-lg"
+            className={`${
+              colorScheme === 'liquidgood' ? 'liquidgood-glass-button' : 'bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/40'
+            } text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto hover:shadow-lg`}
           >
             <ExternalLink className="h-4 w-4" />
             Learning Updates
@@ -230,28 +234,44 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
             onClick={() => setShowAllCourses(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
               className={`w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-2xl ${
                 colorScheme === 'liquidglass' 
                   ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] m-4' 
-                  : colorScheme === 'dark' ? 'bg-gray-900 rounded-2xl' : 'bg-white rounded-2xl'
+                  : colorScheme === 'liquidgood'
+                    ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] m-4'
+                    : colorScheme === 'dark' 
+                      ? 'bg-gray-900 rounded-2xl' 
+                      : 'bg-white rounded-2xl'
               }`}
             >
+              {/* Glass layers for liquidgood - same as liquidglass */}
+              {(colorScheme === 'liquidglass' || colorScheme === 'liquidgood') && (
+                <>
+                  {/* No additional glass layers needed - using backdrop-blur directly */}
+                </>
+              )}
+              
               {/* Header */}
-              <div className={`sticky top-0 z-10 flex items-center justify-between p-6 border-b backdrop-blur-sm ${
-                colorScheme === 'liquidglass' 
+              <div className={`sticky top-0 z-20 flex items-center justify-between p-6 border-b backdrop-blur-sm ${
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                   ? 'bg-transparent border-white/20 rounded-t-[20px]' 
-                  : colorScheme === 'dark' ? 'border-gray-700 bg-gray-900/95 rounded-t-2xl' : 'bg-white/95 rounded-t-2xl'
+                  : colorScheme === 'dark' 
+                    ? 'border-gray-700 bg-gray-900/95 rounded-t-2xl' 
+                    : 'bg-white/95 rounded-t-2xl'
               }`}>
                 <h2 className={`text-2xl font-bold ${
-                  colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                  colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                    ? 'text-white' 
+                    : 'text-gray-900'
                 }`}>
                   Learning Portfolio ({allCourses.length} Courses)
                 </h2>
-                {colorScheme === 'liquidglass' ? (
+                {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
                   <button
                     onClick={() => setShowAllCourses(false)}
                     className="p-2 rounded-lg transition-colors bg-white/10 hover:bg-white/20 border border-white/20 text-white"
@@ -278,12 +298,14 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {allCourses.map((course, index) => (
                     <Card key={index} className={`${
-                      colorScheme === 'liquidglass' 
-                        ? 'bg-white/5 border-white/20 backdrop-blur-sm' 
-                        : colorScheme === 'dark' ? 'bg-gray-800/50 border-gray-700' : ''
+                      colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
+                        ? 'bg-white/10 border-white/20 backdrop-blur-sm' 
+                        : colorScheme === 'dark' 
+                          ? 'bg-gray-800/50 border-gray-700' 
+                          : ''
                     }`}>
                       <CardContent className="p-4">
-                        {colorScheme === 'liquidglass' ? (
+                        {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
                           <span className="inline-block mb-2 text-xs px-2 py-1 rounded-md bg-white/10 border border-white/20 text-white">
                             {course.category}
                           </span>
@@ -295,7 +317,9 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
                           </Badge>
                         )}
                         <h4 className={`font-medium text-sm ${
-                          colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                          colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                            ? 'text-white' 
+                            : 'text-gray-900'
                         }`}>
                           {course.title}
                         </h4>

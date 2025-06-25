@@ -38,7 +38,7 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
         onClick={onClose}
       >
         <motion.div
@@ -47,27 +47,36 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
           exit={{ scale: 0.9, opacity: 0 }}
           onClick={(e) => e.stopPropagation()}
           className={`w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl ${
-            colorScheme === 'liquidglass' 
-              ? 'bg-black/20 backdrop-blur-lg border border-white/20 rounded-[20px] m-4' 
+            colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
+              ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] m-4' 
               : colorScheme === 'dark' 
                 ? 'bg-gray-900 rounded-2xl' 
                 : 'bg-white rounded-2xl'
           }`}
         >
+          {/* Glass layers - same for both liquidglass and liquidgood */}
+          {(colorScheme === 'liquidglass' || colorScheme === 'liquidgood') && (
+            <>
+              {/* No additional glass layers needed - using backdrop-blur directly */}
+            </>
+          )}
+          
           {/* Header */}
-          <div className={`sticky top-0 z-10 flex items-center justify-between p-6 border-b backdrop-blur-sm ${
-            colorScheme === 'liquidglass' 
-              ? 'bg-white/10 border-white/20 rounded-t-[20px]' 
+          <div className={`sticky top-0 z-20 flex items-center justify-between p-6 border-b backdrop-blur-sm ${
+            colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
+              ? 'bg-white/10 backdrop-blur-md border-white/20 rounded-t-[20px]' 
               : 'bg-white/95 dark:bg-gray-900/95 rounded-t-2xl'
           }`}>
             <div>
               <h2 className={`text-2xl font-bold ${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-gray-900'
               }`}>
                 {project.title}
               </h2>
-              {colorScheme === 'liquidglass' ? (
-                <span className="glass-badge mt-2 inline-block">
+              {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
+                <span className="mt-2 inline-block px-3 py-1 bg-white/10 border border-white/20 rounded-md text-white text-sm">
                   {project.category}
                 </span>
               ) : (
@@ -76,7 +85,7 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
                 </Badge>
               )}
             </div>
-            {colorScheme === 'liquidglass' ? (
+            {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg transition-colors bg-white/10 hover:bg-white/20 border border-white/20 text-white"
@@ -136,12 +145,12 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
           </div>
 
           {/* Content */}
-          <div className="p-6 space-y-6">
+          <div className={`p-6 space-y-6 ${(colorScheme === 'liquidglass' || colorScheme === 'liquidgood') ? 'relative z-20' : ''}`}>
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {project.tags.map((tag) => (
-                colorScheme === 'liquidglass' ? (
-                  <span key={tag} className="glass-badge">
+                (colorScheme === 'liquidglass' || colorScheme === 'liquidgood') ? (
+                  <span key={tag} className="px-3 py-1 bg-white/10 border border-white/20 rounded-md text-white text-sm">
                     {tag}
                   </span>
                 ) : (
@@ -157,12 +166,16 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
             {/* Description */}
             <div>
               <h3 className={`text-lg font-semibold mb-2 ${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-gray-900'
               }`}>
                 Overview
               </h3>
               <p className={`${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white/90' 
+                  : 'text-gray-600'
               }`}>
                 {project.description}
               </p>
@@ -171,12 +184,16 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
             {/* Problem */}
             <div>
               <h3 className={`text-lg font-semibold mb-2 ${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-gray-900'
               }`}>
                 Problem
               </h3>
               <p className={`${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white/90' 
+                  : 'text-gray-600'
               }`}>
                 {project.problem}
               </p>
@@ -185,12 +202,16 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
             {/* Solution */}
             <div>
               <h3 className={`text-lg font-semibold mb-2 ${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-gray-900'
               }`}>
                 Solution
               </h3>
               <p className={`${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white/90' 
+                  : 'text-gray-600'
               }`}>
                 {project.solution}
               </p>
@@ -199,12 +220,16 @@ const CaseStudyModal = ({ project, onClose, colorScheme = 'default' }: CaseStudy
             {/* Impact */}
             <div>
               <h3 className={`text-lg font-semibold mb-2 ${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-white' : 'text-gray-900'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white' 
+                  : 'text-gray-900'
               }`}>
                 Impact
               </h3>
               <p className={`${
-                colorScheme === 'liquidglass' || colorScheme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
+                  ? 'text-white/90' 
+                  : 'text-gray-600'
               }`}>
                 {project.impact}
               </p>

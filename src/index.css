@@ -2,7 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
+/* Advanced Glass Morphism Variables */
+:root {
+  --lg-bg-color: rgba(255, 255, 255, 0.064);
+  --lg-highlight: rgba(255, 255, 255, 0.312);
+  --lg-text: #ffffff;
+  --lg-hover-glow: rgba(255, 255, 255, 0.4);
+  --lg-red: #fb4268;
+  --lg-grey: #5b5b5b;
+  
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222.2 84% 4.9%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --radius: 0.5rem;
+
+  --sidebar-background: 0 0% 98%;
+
+  --sidebar-foreground: 240 5.3% 26.1%;
+
+  --sidebar-primary: 240 5.9% 10%;
+
+  --sidebar-primary-foreground: 0 0% 98%;
+
+  --sidebar-accent: 240 4.8% 95.9%;
+
+  --sidebar-accent-foreground: 240 5.9% 10%;
+
+  --sidebar-border: 220 13% 91%;
+
+  --sidebar-ring: 217.2 91.2% 59.8%;
+
+  --lg-glass-filter: url(#liquidgood-distortion);
+  --lg-glass-overlay: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  --lg-glass-specular: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+  --lg-border: rgba(255, 255, 255, 0.25);
+  --lg-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --lg-text: rgba(255, 255, 255, 0.95);
+  --lg-text-secondary: rgba(255, 255, 255, 0.75);
+}
 
 @layer base {
   :root {
@@ -99,6 +164,18 @@
 
   body {
     @apply bg-background text-foreground;
+    margin: 0;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
   }
 }
 
@@ -353,19 +430,25 @@
 
 /* Liquid Glass Pills - Simple */
 .liquid-glass-pill {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 9999px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 2.2);
 }
 
 .liquid-glass-pill:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.25);
   border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Liquid Glass Button Overrides - Simple */
@@ -381,3 +464,656 @@
   transform: translateY(-1px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
+
+/* ========== ADVANCED GLASS CONTAINER ========== */
+.glass-container {
+  position: relative;
+  display: flex;
+  font-weight: 600;
+  color: var(--lg-text);
+  cursor: pointer;
+  background: transparent;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.glass-container--large {
+  min-width: 32rem;
+}
+
+.glass-container--rounded {
+  border-radius: 2rem;
+}
+
+/* ========== GLASS LAYERS ========== */
+.glass-filter {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  backdrop-filter: blur(0px);
+  filter: url(#lg-dist);
+  isolation: isolate;
+}
+
+.glass-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--lg-bg-color);
+}
+
+.glass-specular {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0 var(--lg-highlight),
+    inset 0 0 5px var(--lg-highlight);
+}
+
+.glass-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 1rem 1.5rem 0.9rem;
+}
+
+.glass-content--inline {
+  padding: 0.25rem 2rem 0.25rem 0.75rem;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+/* ========== ENHANCED GLASS BUTTON ========== */
+.glass-button-enhanced {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--lg-text);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-button-enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), 0 0 25px rgba(255, 255, 255, 0.05);
+}
+
+.glass-button-enhanced:active {
+  transform: translateY(-1px);
+}
+
+/* ========== ENHANCED GLASS CARD ========== */
+.glass-card-enhanced {
+  position: relative;
+  background: transparent;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.glass-card-enhanced:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+.glass-card-enhanced:hover .glass-filter {
+  backdrop-filter: blur(0px);
+}
+
+.glass-card-enhanced:hover .glass-overlay {
+  background: var(--lg-hover-glow);
+}
+
+/* ========== GLASS FILTER UPDATES ========== */
+.glass-card-enhanced .glass-filter {
+  filter: url(#lg-dist-card);
+}
+
+.glass-button-enhanced .glass-filter {
+  filter: url(#lg-dist);
+}
+
+.glass-container .glass-filter {
+  filter: url(#lg-dist-container);
+}
+
+/* ========== ENHANCED GLASS ANIMATIONS ========== */
+@keyframes glass-glow {
+  0% { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1); }
+  50% { box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 255, 255, 0.1); }
+  100% { box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1); }
+}
+
+.glass-button-enhanced:hover {
+  animation: glass-glow 2s ease-in-out infinite;
+}
+
+/* ========== LIQUIDGOOD THEME ========== */
+/* Liquid Good Theme - Using exact styles from provided HTML */
+
+/* Theme background */
+.liquidgood-theme {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.liquidgood-theme body {
+  background: transparent !important;
+}
+
+/* Ensure html and body cover full height */
+html, body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.liquidgood-theme html,
+.liquidgood-theme body {
+  background: transparent !important;
+  min-height: 100vh;
+}
+
+.liquidgood-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 180vh;
+  background: url('/abstract5.png') center/cover;
+  z-index: -1;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.liquidgood-background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* Liquidgood theme text brightness */
+.liquidgood-theme h1,
+.liquidgood-theme h2,
+.liquidgood-theme h3,
+.liquidgood-theme h4,
+.liquidgood-theme h5,
+.liquidgood-theme h6 {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.liquidgood-theme p {
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== LIQUIDGOOD GLASS CONTAINER ========== */
+.liquidgood-glass-container {
+  position: relative;
+  display: flex;
+  font-weight: 600;
+  color: var(--lg-text);
+  cursor: pointer;
+  background: transparent;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-glass-container--large {
+  min-width: 32rem;
+}
+
+.liquidgood-glass-container--rounded {
+  border-radius: 2rem;
+}
+
+  /* ========== LIQUIDGOOD GLASS LAYERS ========== */
+  .liquidgood-glass-filter {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    backdrop-filter: blur(0px);
+    filter: url(#liquidgood-dist);
+    isolation: isolate;
+  }
+
+.liquidgood-glass-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--lg-bg-color);
+}
+
+.liquidgood-glass-specular {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  overflow: hidden;
+  box-shadow: inset 1px 1px 0 var(--lg-highlight),
+    inset 0 0 5px var(--lg-highlight);
+}
+
+.liquidgood-glass-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 1rem 1.5rem 0.9rem;
+}
+
+.liquidgood-glass-content--inline {
+  padding: 0.25rem 2rem 0.25rem 0.75rem;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+/* ========== LIQUIDGOOD PLAYER STYLES ========== */
+.liquidgood-player {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+.liquidgood-player__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.5rem;
+}
+
+.liquidgood-player__img {
+  width: 5rem;
+  height: auto;
+  margin: 0.25rem 0;
+  border-radius: 0.5rem;
+}
+
+.liquidgood-player__legend {
+  display: flex;
+  flex-direction: column;
+  margin: 0 1rem;
+  color: black;
+}
+
+.liquidgood-player__legend__title {
+  font-size: 1rem;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 0 3px #444;
+}
+
+.liquidgood-player__legend__sub-title {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.45;
+  color: #ccc;
+  text-shadow: 0 0 3px #444;
+}
+
+.liquidgood-player__controls {
+  margin-right: -1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: #fff;
+}
+
+.liquidgood-player__controls__play {
+  margin-right: 1rem;
+  display: flex;
+}
+
+.liquidgood-player__controls__ff {
+  display: flex;
+}
+
+/* ========== LIQUIDGOOD BUTTONS ========== */
+.liquidgood-glass-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--lg-text);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+.liquidgood-glass-button:active {
+  transform: translateY(0);
+  transition: all 0.1s ease;
+}
+
+/* ========== LIQUIDGOOD CARDS ========== */
+.liquidgood-glass-card {
+  position: relative;
+  background: transparent;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== LIQUIDGOOD THEME OVERRIDES ========== */
+.liquidgood-theme .glass-card {
+  position: relative;
+  background: transparent;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-theme .glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+.liquidgood-theme .glass-button {
+  position: relative;
+  background: transparent;
+  border-radius: 2rem;
+  overflow: hidden;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-theme .glass-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 8px rgba(0, 0, 0, 0.25), 0 0 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== LIQUIDGOOD CONTENT STYLING ========== */
+.liquidgood-glass-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 1rem 1.5rem 0.9rem;
+}
+
+.liquidgood-glass-content--inline {
+  padding: 0.25rem 2rem 0.25rem 0.75rem;
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+
+/* ========== LIQUIDGOOD PILLS ========== */
+.liquidgood-glass-pill {
+  position: relative;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: transparent;
+  border-radius: 1rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15), 0 0 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-glass-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== LIQUIDGOOD FILTER UPDATES ========== */
+.liquidgood-glass-card .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-card);
+}
+
+.liquidgood-glass-button .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-button);
+}
+
+.liquidgood-glass-container .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-container);
+}
+
+/* Footer filter */
+footer .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-footer);
+}
+
+/* Social icons filters */
+a[href*="linkedin"] .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-linkedin);
+}
+
+a[href*="x.com"] .liquidgood-glass-filter,
+a[href*="twitter"] .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-twitter);
+}
+
+/* Ask me anything button filter */
+button:has(.liquidgood-glass-content) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-askme);
+}
+
+/* Sidebar filter */
+.liquidgood-glass-card:has(svg filter[id*="sidebar"]) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-sidebar);
+}
+
+/* Floating button filter */
+.liquidgood-glass-button:has(svg filter[id*="floating"]) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-floating);
+}
+
+/* Prompts filter */
+.liquidgood-glass-button:has(svg filter[id*="prompts"]) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-prompts);
+}
+
+/* Search input filter */
+.liquidgood-glass-input:has(svg filter[id*="search"]) .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-search);
+}
+
+/* SVG Filter References */
+.liquidgood-glass-filter {
+  filter: url(#liquidgood-dist);
+}
+
+.liquidgood-glass-card .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-card);
+}
+
+.liquidgood-glass-button .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-button);
+}
+
+.liquidgood-glass-pill .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-pill);
+}
+
+.liquidgood-glass-floating .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-floating);
+}
+
+.liquidgood-glass-footer .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-footer);
+}
+
+.liquidgood-glass-sidebar .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-sidebar);
+}
+
+.liquidgood-glass-modal .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-modal);
+}
+
+.liquidgood-glass-learning-modal .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-learning-modal);
+}
+
+/* Liquidgood Glass Input */
+.liquidgood-glass-input {
+  position: relative;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 2.2);
+}
+
+.liquidgood-glass-input:focus-within {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    inset 0 2px 8px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 6px 16px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.liquidgood-glass-input .liquidgood-glass-filter {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  z-index: 1;
+  filter: url(#liquidgood-dist-search);
+}
+
+.liquidgood-glass-input .liquidgood-glass-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(255, 255, 255, 0.08) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.08) 75%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+  border-radius: 12px;
+  z-index: 2;
+}
+
+.liquidgood-glass-input .liquidgood-glass-specular {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.25) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 12px;
+  z-index: 3;
+  box-shadow: 
+    inset 1px 1px 0 rgba(255, 255, 255, 0.2),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+/* Liquidgood Glass Button Layers */
+.liquidgood-glass-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--liquidgood-glass-overlay);
+  border-radius: 12px;
+  z-index: -1;
+}
+
+.liquidgood-glass-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--liquidgood-glass-specular);
+  border-radius: 12px;
+  z-index: -1;
+}
+
+/* Liquidgood Glass Modals */
+.liquidgood-glass-modal {
+  position: relative;
+  background: transparent;
+}
+
+.liquidgood-glass-learning-modal {
+  position: relative;
+  background: transparent;
+}
+
+.liquidgood-glass-sidebar {
+  position: relative;
+  background: transparent;
+}
+
+/* SVG filter references */
+.liquidgood-glass-filter {
+  filter: url(#liquidgood-dist);
+}
+
+.liquidgood-glass-button .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-floating);
+}
+
+.liquidgood-glass-card .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-card);
+}
+
+.liquidgood-glass-pill .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-pill);
+}
+
+.liquidgood-glass-modal .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-modal);
+}
+
+.liquidgood-glass-learning-modal .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-learning-modal);
+}
+
+.liquidgood-glass-sidebar .liquidgood-glass-filter {
+  filter: url(#liquidgood-dist-sidebar);
+}
+

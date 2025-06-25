@@ -7,13 +7,18 @@ interface ColorSchemeToggleProps {
 
 const ColorSchemeToggle = ({ onSchemeChange }: ColorSchemeToggleProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentScheme, setCurrentScheme] = useState('liquidglass');
+  const [currentScheme, setCurrentScheme] = useState('liquidgood');
 
   const colorSchemes = [
     {
       id: 'liquidglass',
       name: 'Liquid Glass',
       preview: 'bg-gradient-to-r from-blue-300 to-purple-100'
+    },
+    {
+      id: 'liquidgood',
+      name: 'Liquid Good',
+      preview: 'bg-gradient-to-r from-pink-300 to-orange-200'
     },
     {
       id: 'professional',
@@ -43,8 +48,8 @@ const ColorSchemeToggle = ({ onSchemeChange }: ColorSchemeToggleProps) => {
       </button>
       
       {isOpen && (
-        <div className="absolute top-14 right-0 glass-card shadow-xl rounded-xl p-3">
-          <div className="flex gap-2">
+        <div className="absolute top-0 right-14 glass-card shadow-xl rounded-xl p-3">
+          <div className="flex flex-col gap-2">
             {colorSchemes.map((scheme) => (
               <button
                 key={scheme.id}

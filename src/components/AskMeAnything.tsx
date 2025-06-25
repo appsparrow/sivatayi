@@ -86,22 +86,82 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
       case 'sunset':
         return {
           background: 'from-orange-600 to-pink-600',
-          card: 'bg-gradient-to-br from-orange-900/90 to-pink-900/90 backdrop-blur-sm'
+          sidebar: 'bg-gradient-to-br from-orange-100/95 to-pink-100/95 backdrop-blur-sm border border-orange-200/50 shadow-2xl',
+          header: 'border-orange-200/50',
+          iconBg: 'bg-orange-200/50 border-orange-300/50',
+          iconColor: 'text-orange-600',
+          textPrimary: 'text-orange-900',
+          textSecondary: 'text-orange-700/80',
+          button: 'bg-orange-200/50 hover:bg-orange-300/50 border-orange-300/50 text-orange-800',
+          closeButton: 'bg-orange-200/50 hover:bg-orange-300/50 border-orange-300/50 text-orange-800',
+          messageBg: 'bg-orange-200/40 border-orange-300/50 text-orange-900',
+          userMessageBg: 'bg-pink-200/50 border-pink-300/50 text-pink-900',
+          input: 'bg-orange-100/50 border-orange-300/50 text-orange-900 placeholder-orange-600/60',
+          disclaimer: 'bg-orange-200/40 border-orange-300/50'
         };
       case 'liquidglass':
         return {
           background: 'from-blue-400 to-purple-400',
-          card: 'glass-card'
+          sidebar: 'bg-white/10 backdrop-blur-lg border border-white/20',
+          header: 'border-white/20',
+          iconBg: 'bg-white/10 border-white/20',
+          iconColor: 'text-white',
+          textPrimary: 'text-white',
+          textSecondary: 'text-white/80',
+          button: 'bg-white/10 hover:bg-white/20 border-white/20 text-white',
+          closeButton: 'bg-white/10 hover:bg-white/20 border-white/20 text-white',
+          messageBg: 'bg-white/10 border-white/20 text-white',
+          userMessageBg: 'bg-white/15 border-white/25 text-white',
+          input: 'bg-white/10 border-white/20 text-white placeholder-white/60',
+          disclaimer: 'bg-white/10 border-white/20'
+        };
+      case 'liquidgood':
+        return {
+          background: 'from-pink-400 to-orange-400',
+          sidebar: 'bg-white/10 backdrop-blur-lg border border-white/20',
+          header: 'border-white/20',
+          iconBg: 'bg-white/10 border-white/20',
+          iconColor: 'text-white',
+          textPrimary: 'text-white',
+          textSecondary: 'text-white/80',
+          button: 'liquidgood-glass-button text-white',
+          closeButton: 'bg-white/10 hover:bg-white/20 border-white/20 text-white',
+          messageBg: 'bg-white/10 border-white/20 text-white',
+          userMessageBg: 'bg-white/15 border-white/25 text-white',
+          input: 'bg-white/10 border-white/20 text-white placeholder-white/60',
+          disclaimer: 'bg-white/10 border-white/20'
         };
       case 'professional':
         return {
           background: 'from-gray-700 to-gray-900',
-          card: 'bg-white/95 border border-gray-200'
+          sidebar: 'bg-white/98 backdrop-blur-sm border border-gray-200 shadow-2xl',
+          header: 'border-gray-200',
+          iconBg: 'bg-gray-100 border-gray-200',
+          iconColor: 'text-gray-700',
+          textPrimary: 'text-gray-900',
+          textSecondary: 'text-gray-600',
+          button: 'bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-700',
+          closeButton: 'bg-gray-100 hover:bg-gray-200 border-gray-200 text-gray-700',
+          messageBg: 'bg-gray-100 border-gray-200 text-gray-900',
+          userMessageBg: 'bg-blue-50 border-blue-200 text-gray-900',
+          input: 'bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-500',
+          disclaimer: 'bg-blue-50 border-blue-200'
         };
       default:
         return {
           background: 'from-blue-600 to-purple-600',
-          card: 'bg-gradient-to-br from-blue-900/90 to-purple-900/90 backdrop-blur-sm'
+          sidebar: 'bg-white border border-gray-200 shadow-2xl',
+          header: 'border-gray-200',
+          iconBg: 'bg-black border border-gray-300',
+          iconColor: 'text-white',
+          textPrimary: 'text-black',
+          textSecondary: 'text-gray-600',
+          button: 'bg-black hover:bg-gray-800 border border-gray-300 text-white',
+          closeButton: 'bg-black hover:bg-gray-800 border border-gray-300 text-white',
+          messageBg: 'bg-black border border-gray-300 text-white',
+          userMessageBg: 'bg-gray-100 border border-gray-300 text-black',
+          input: 'bg-gray-50 border border-gray-300 text-black placeholder-gray-500',
+          disclaimer: 'bg-gray-100 border border-gray-300'
         };
     }
   };
@@ -271,7 +331,9 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
           className={`fixed bottom-20 right-6 ${
             colorScheme === 'liquidglass' 
               ? 'bg-white/15 backdrop-blur-lg border-2 border-white/30 shadow-xl' 
-              : `bg-gradient-to-r ${colors.background}`
+              : colorScheme === 'liquidgood'
+                ? 'liquidgood-glass-button'
+                : `bg-gradient-to-r ${colors.background}`
           } text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 z-[10001] flex items-center gap-2`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -287,7 +349,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
         </motion.button>
       </div>
 
-      {/* Chat Sidebar - From right side, full height */}
+      {/* Chat Sidebar */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -295,92 +357,48 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[10002]"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[10002]"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-              className={`fixed right-0 top-0 h-full w-full sm:w-96 shadow-2xl z-[10003] flex flex-col ${
-                colorScheme === 'liquidglass' 
-                  ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] sm:mr-3 sm:mt-3 mb-3 sm:mb-3' 
-                  : colorScheme === 'professional'
-                    ? 'bg-white border border-gray-200 rounded-lg sm:mr-3 sm:mt-3 mb-3 sm:mb-3'
-                    : colors.card
-              }`}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              className={`fixed right-0 top-0 h-full w-full sm:w-96 shadow-2xl z-[10003] flex flex-col ${colors.sidebar} rounded-[20px] sm:mr-3 sm:mt-3 mb-3 sm:mb-3`}
             >
               {/* Header */}
-              <div className={`${
-                colorScheme === 'liquidglass' 
-                  ? 'bg-transparent border-b border-white/20 rounded-t-[20px]' 
-                  : colorScheme === 'professional'
-                    ? 'bg-white border-b border-gray-200'
-                    : `bg-gradient-to-r ${colors.background} border-b border-white/20`
-              } ${colorScheme === 'professional' ? 'text-gray-900' : 'text-white'} p-4`}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`${
-                      colorScheme === 'liquidglass' 
-                        ? 'glass-icon' 
-                        : colorScheme === 'professional'
-                          ? 'bg-blue-100 text-blue-600'
-                          : 'bg-white/20'
-                    } p-2 rounded-full`}>
-                      <Bot className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <h3 className={`text-lg font-bold ${colorScheme === 'professional' ? 'text-gray-900' : 'text-white'}`}>Ask Me Anything</h3>
-                      <p className={`text-xs ${colorScheme === 'professional' ? 'text-gray-600' : 'text-white/80'}`}>
-                        Human and OpenAI powered
-                      </p>
-                    </div>
+              <div className={`sticky top-0 z-20 flex items-center justify-between p-6 border-b backdrop-blur-sm bg-transparent ${colors.header} rounded-t-[20px]`}>
+                <div className="flex items-center gap-3">
+                  <div className={`${colors.iconBg} p-2 rounded-full`}>
+                    <Bot className={`h-5 w-5 ${colors.iconColor}`} />
                   </div>
-                  <button
-                    onClick={handleCloseChat}
-                    className={`p-2 rounded-lg transition-colors ${
-                      colorScheme === 'liquidglass' 
-                        ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white' 
-                        : colorScheme === 'professional'
-                          ? 'text-gray-600 hover:bg-gray-100'
-                          : 'text-white hover:bg-white/20'
-                    }`}
-                  >
-                    <X className="h-5 w-5" />
-                  </button>
+                  <div>
+                    <h3 className={`text-lg font-bold ${colors.textPrimary}`}>Ask Me Anything</h3>
+                    <p className={`text-xs ${colors.textSecondary}`}>
+                      Human and OpenAI powered
+                    </p>
+                  </div>
                 </div>
+                <button
+                  onClick={handleCloseChat}
+                  className={`p-2 rounded-lg transition-colors ${colors.closeButton}`}
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
 
               {/* AI Disclaimer */}
               {showNote && (
-                <div className={`mx-4 mt-4 p-3 rounded-lg border ${
-                  colorScheme === 'liquidglass' 
-                    ? 'bg-blue-500/20 border-blue-400/30' 
-                    : colorScheme === 'professional'
-                      ? 'bg-gray-100 border-gray-300'
-                      : 'bg-blue-500/20 border-blue-500/30'
-                }`}>
+                <div className={`mx-4 mt-4 p-3 rounded-lg border ${colors.disclaimer}`}>
                   <div className="flex justify-between items-start gap-2">
-                    <p className={`text-xs ${
-                      colorScheme === 'liquidglass' 
-                        ? 'text-blue-200' 
-                        : colorScheme === 'professional'
-                          ? 'text-gray-700'
-                          : 'text-blue-200'
-                    }`}>
+                    <p className={`text-xs ${colors.textSecondary}`}>
                       <strong>Note:</strong> This AI is trained on GPT models and responses might be inaccurate.  
-                      This personal assistant is a beginning of my vision of how to seamlessly bring agents into human-s   interactions and some interesting conversational skills.
+                      This personal assistant is a beginning of my vision of how to seamlessly bring agents into human-s interactions and some interesting conversational skills.
                     </p>
                     <button
                       onClick={() => setShowNote(false)}
-                      className={`flex-shrink-0 p-1 rounded transition-colors ${
-                        colorScheme === 'liquidglass' 
-                          ? 'text-blue-300 hover:text-blue-100 hover:bg-blue-400/20' 
-                        : colorScheme === 'professional'
-                          ? 'text-gray-500 hover:text-gray-700 hover:bg-gray-200'
-                          : 'text-blue-300 hover:text-blue-100 hover:bg-blue-400/20'
-                      }`}
+                      className={`flex-shrink-0 p-1 rounded transition-colors ${colors.textSecondary} hover:${colors.textPrimary} hover:bg-black/10`}
                     >
                       <X className="h-3 w-3" />
                     </button>
@@ -390,7 +408,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
 
               {/* API Error Alert */}
               {apiError && (
-                <div className="mx-4 mt-4 p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center gap-2">
+                <div className="mx-4 mt-4 p-3 rounded-lg flex items-center gap-2 bg-red-500/20 border border-red-500/30">
                   <AlertCircle className="h-4 w-4 text-red-400" />
                   <p className="text-sm text-red-300">{apiError}</p>
                 </div>
@@ -406,84 +424,44 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                     className={`flex gap-3 ${message.isUser ? 'justify-end' : 'justify-start'}`}
                   >
                     {!message.isUser && (
-                      <div className={`${
-                        colorScheme === 'liquidglass' 
-                          ? 'bg-white/20 backdrop-blur-sm border border-white/30' 
-                          : colorScheme === 'professional'
-                            ? 'bg-gray-100 border border-gray-200'
-                            : `bg-gradient-to-r ${colors.background}`
-                      } ${colorScheme === 'professional' ? 'text-gray-700' : 'text-white'} p-2 rounded-full flex-shrink-0`}>
+                      <div className={`${colors.messageBg} backdrop-blur-sm p-2 rounded-full flex-shrink-0`}>
                         <Bot className="h-4 w-4" />
                       </div>
                     )}
                     <div className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                       message.isUser 
-                        ? colorScheme === 'liquidglass'
-                          ? 'bg-white/20 backdrop-blur-sm border border-white/30 text-white ml-auto'
-                          : colorScheme === 'professional'
-                            ? 'bg-gray-100 border border-gray-200 text-gray-900 ml-auto'
-                            : `bg-gradient-to-r ${colors.background} text-white ml-auto`
-                        : colorScheme === 'liquidglass'
-                          ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white'
-                          : colorScheme === 'professional'
-                            ? 'bg-white border border-gray-200 text-gray-900'
-                            : 'bg-white/10 backdrop-blur-sm text-white'
+                        ? `${colors.userMessageBg} backdrop-blur-sm`
+                        : `${colors.messageBg} backdrop-blur-sm`
                     }`}>
                       <p className="text-sm whitespace-pre-wrap">{message.text}</p>
                     </div>
                     {message.isUser && (
-                      <div className={`${
-                        colorScheme === 'liquidglass' 
-                          ? 'bg-white/20 backdrop-blur-sm border border-white/30' 
-                          : colorScheme === 'professional'
-                            ? 'bg-gray-100 border border-gray-200'
-                            : 'bg-white/20'
-                      } ${colorScheme === 'professional' ? 'text-gray-700' : 'text-white'} p-2 rounded-full flex-shrink-0`}>
+                      <div className={`${colors.messageBg} backdrop-blur-sm p-2 rounded-full flex-shrink-0`}>
                         <User className="h-4 w-4" />
                       </div>
                     )}
                   </motion.div>
                 ))}
-                
-                {/* Loading indicator */}
+
                 {isLoading && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex gap-3 justify-start"
-                  >
-                    <div className={`${
-                      colorScheme === 'liquidglass' 
-                        ? 'bg-white/20 backdrop-blur-sm border border-white/30' 
-                        : colorScheme === 'professional'
-                          ? 'bg-gray-100 border border-gray-200'
-                          : `bg-gradient-to-r ${colors.background}`
-                    } ${colorScheme === 'professional' ? 'text-gray-700' : 'text-white'} p-2 rounded-full flex-shrink-0`}>
+                  <div className="flex gap-3 justify-start">
+                    <div className={`${colors.messageBg} backdrop-blur-sm p-2 rounded-full flex-shrink-0`}>
                       <Bot className="h-4 w-4" />
                     </div>
-                    <div className={`max-w-[80%] px-4 py-3 rounded-2xl ${
-                      colorScheme === 'liquidglass'
-                        ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white'
-                        : colorScheme === 'professional'
-                          ? 'bg-white border border-gray-200 text-gray-900'
-                          : 'bg-white/10 backdrop-blur-sm text-white'
-                    }`}>
+                    <div className={`max-w-[80%] px-4 py-3 rounded-2xl ${colors.messageBg} backdrop-blur-sm`}>
                       <div className="flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <p className="text-sm">Thinking...</p>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
-                
-                {/* Scroll anchor */}
-                <div ref={messagesEndRef} />
               </div>
 
-              {/* Initial Suggestions - Only show at start */}
-              {showSuggestions && questionCount === 0 && !sessionExhausted && !isLoading && (
+              {/* Suggestions */}
+              {!sessionExhausted && messages.length === 0 && (
                 <div className="px-4 pb-4">
-                  <p className={`text-sm mb-3 ${colorScheme === 'professional' ? 'text-gray-600' : 'text-white/80'}`}>Try asking:</p>
+                  <p className={`text-sm mb-3 ${colors.textSecondary}`}>Try asking:</p>
                   <div className="grid grid-cols-1 gap-2">
                     {suggestedQuestions.map((question) => (
                       <Button
@@ -491,13 +469,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleSuggestedQuestion(question)}
-                        className={`text-xs text-left justify-start h-auto py-2 px-3 whitespace-normal ${
-                          colorScheme === 'liquidglass'
-                            ? 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
-                            : colorScheme === 'professional'
-                              ? 'bg-white hover:bg-gray-50 border-gray-200 text-gray-900'
-                              : 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
-                        }`}
+                        className={`text-xs text-left justify-start h-auto py-2 px-3 whitespace-normal ${colors.button}`}
                       >
                         {question}
                       </Button>
@@ -512,18 +484,46 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                   <button
                     onClick={() => setPromptsExpanded(!promptsExpanded)}
                     className={`w-full flex items-center justify-between p-3 rounded-lg transition-colors ${
-                      colorScheme === 'liquidglass'
-                        ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white'
-                        : colorScheme === 'professional'
-                          ? 'bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-900'
-                          : 'bg-white/10 hover:bg-white/20 border border-white/20 text-white'
-                    }`}
+                      colorScheme === 'liquidgood' ? 'relative overflow-hidden' : ''
+                    } ${colors.button}`}
                   >
-                    <span className="text-sm font-medium">View Prompts</span>
+                    {/* Glass layers for liquidgood */}
+                    {colorScheme === 'liquidgood' && (
+                      <>
+                        <div className="liquidgood-glass-filter"></div>
+                        <div className="liquidgood-glass-overlay"></div>
+                        <div className="liquidgood-glass-specular"></div>
+                        
+                        {/* SVG Filter */}
+                        <svg style={{ display: 'none' }}>
+                          <defs>
+                            <filter id="liquidgood-dist-prompts" x="0%" y="0%" width="100%" height="100%">
+                              <feTurbulence 
+                                type="fractalNoise" 
+                                baseFrequency="0.008 0.008" 
+                                numOctaves="2" 
+                                seed="92" 
+                                result="noise" 
+                              />
+                              <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                              <feDisplacementMap 
+                                in="SourceGraphic" 
+                                in2="blurred" 
+                                scale="70" 
+                                xChannelSelector="R" 
+                                yChannelSelector="G" 
+                              />
+                            </filter>
+                          </defs>
+                        </svg>
+                      </>
+                    )}
+                    
+                    <span className={`text-sm font-medium ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`}>View Prompts</span>
                     {promptsExpanded ? (
-                      <ChevronUp className="h-4 w-4" />
+                      <ChevronUp className={`h-4 w-4 ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`} />
                     ) : (
-                      <ChevronDown className="h-4 w-4" />
+                      <ChevronDown className={`h-4 w-4 ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`} />
                     )}
                   </button>
                   
@@ -542,14 +542,21 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                             size="sm"
                             onClick={() => handleSuggestedQuestion(question)}
                             className={`text-xs text-left justify-start h-auto py-2 px-3 whitespace-normal w-full ${
-                              colorScheme === 'liquidglass'
-                                ? 'bg-white/5 hover:bg-white/15 border-white/10 text-white/90'
-                                : colorScheme === 'professional'
-                                  ? 'bg-white hover:bg-gray-50 border-gray-200 text-gray-900'
-                                  : 'bg-white/5 hover:bg-white/15 border-white/10 text-white/90'
-                            }`}
+                              colorScheme === 'liquidgood' ? 'relative overflow-hidden' : ''
+                            } ${colors.button}`}
                           >
-                            {question}
+                            {/* Glass layers for liquidgood */}
+                            {colorScheme === 'liquidgood' && (
+                              <>
+                                <div className="liquidgood-glass-filter"></div>
+                                <div className="liquidgood-glass-overlay"></div>
+                                <div className="liquidgood-glass-specular"></div>
+                              </>
+                            )}
+                            
+                            <span className={colorScheme === 'liquidgood' ? 'relative z-10' : ''}>
+                              {question}
+                            </span>
                           </Button>
                         ))}
                       </motion.div>
@@ -559,18 +566,12 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
               )}
 
               {/* Input */}
-              <div className={`p-4 pb-6 ${
-                colorScheme === 'liquidglass' 
-                  ? 'border-t border-white/20 rounded-b-[20px]' 
-                  : colorScheme === 'professional'
-                    ? 'border-t border-gray-200'
-                    : 'border-t border-white/20'
-              }`}>
+              <div className={`p-4 pb-6 border-t ${colors.header} rounded-b-[20px]`}>
                 {/* Question counter or contact message */}
                 <div className="mb-3 text-center">
                   {sessionExhausted ? (
                     <div className="space-y-3">
-                      <p className={`text-sm ${colorScheme === 'professional' ? 'text-gray-600' : 'text-white/80'}`}>
+                      <p className={`text-sm ${colors.textSecondary}`}>
                         Looks like you want to know more about me - or just connect to bounce off thoughts and ideas
                       </p>
                       <div className="flex justify-center gap-3">
@@ -578,13 +579,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                           href="https://www.linkedin.com/in/siva-tayi/"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                            colorScheme === 'liquidglass'
-                              ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white'
-                              : colorScheme === 'professional'
-                                ? 'bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-900'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white'
-                          }`}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${colors.button}`}
                         >
                           <Linkedin className="h-4 w-4" />
                           <span className="text-sm font-medium">LinkedIn</span>
@@ -594,13 +589,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                           href="https://x.com/siva_tayi"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                            colorScheme === 'liquidglass'
-                              ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white'
-                              : colorScheme === 'professional'
-                                ? 'bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-900'
-                                : 'bg-gray-800 hover:bg-gray-900 text-white'
-                          }`}
+                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${colors.button}`}
                         >
                           <Twitter className="h-4 w-4" />
                           <span className="text-sm font-medium">X</span>
@@ -609,7 +598,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                       </div>
                     </div>
                   ) : (
-                    <p className={`text-xs ${colorScheme === 'professional' ? 'text-gray-500' : 'text-white/60'}`}>
+                    <p className={`text-xs ${colors.textSecondary}`}>
                       {3 - questionCount} questions remaining
                     </p>
                   )}
@@ -624,25 +613,13 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
                       ? "Connect with me on LinkedIn or X!" 
                       : "Ask me about my experience, projects, or process..."
                     }
-                    className={`flex-1 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/30 ${
-                      colorScheme === 'liquidglass'
-                        ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white placeholder-white/60'
-                        : colorScheme === 'professional'
-                          ? 'bg-white border border-gray-200 text-gray-900 placeholder-gray-500 focus:ring-blue-500/30'
-                          : 'bg-white/10 border border-white/20 text-white placeholder-white/60'
-                    }`}
+                    className={`flex-1 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-opacity-50 backdrop-blur-sm ${colors.input}`}
                     disabled={isLoading || sessionExhausted}
                   />
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isLoading || sessionExhausted}
-                    className={`px-4 py-3 ${
-                      colorScheme === 'liquidglass'
-                        ? 'bg-white/20 hover:bg-white/30 border border-white/30'
-                        : colorScheme === 'professional'
-                          ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                          : `bg-gradient-to-r ${colors.background} hover:opacity-90`
-                    } ${colorScheme === 'professional' ? 'text-white' : 'text-white'} disabled:opacity-50`}
+                    className={`px-4 py-3 disabled:opacity-50 ${colors.button}`}
                   >
                     {isLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin" />

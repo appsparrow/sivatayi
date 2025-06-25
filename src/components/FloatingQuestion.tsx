@@ -160,11 +160,48 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
           <div className={`${
             colorScheme === 'liquidglass' 
               ? 'glass-floating-question' 
-              : 'bg-white/70 md:bg-white/90 backdrop-blur-sm border border-white/20 hover:shadow-xl'
+              : colorScheme === 'liquidgood'
+                ? 'relative liquidgood-glass-button'
+                : 'bg-white/70 md:bg-white/90 backdrop-blur-sm border border-white/20 hover:shadow-xl'
           } rounded-full w-12 h-12 flex items-center justify-center shadow-lg transition-all duration-300 cursor-pointer`}>
-            <MessageSquare className={`h-5 w-5 ${
-              colorScheme === 'liquidglass' ? 'text-white glass-text' : 'text-blue-600'
-            }`} />
+            {colorScheme === 'liquidgood' && (
+              <>
+                <div className="liquidgood-glass-filter"></div>
+                <div className="liquidgood-glass-overlay"></div>
+                <div className="liquidgood-glass-specular"></div>
+                <div className="liquidgood-glass-content" style={{ position: 'absolute', inset: 0, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <MessageSquare className="h-5 w-5 text-white glass-text" />
+                </div>
+                
+                {/* SVG Filter */}
+                <svg style={{ display: 'none' }}>
+                  <defs>
+                    <filter id="liquidgood-dist-floating" x="0%" y="0%" width="100%" height="100%">
+                      <feTurbulence 
+                        type="fractalNoise" 
+                        baseFrequency="0.008 0.008" 
+                        numOctaves="2" 
+                        seed="92" 
+                        result="noise" 
+                      />
+                      <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                      <feDisplacementMap 
+                        in="SourceGraphic" 
+                        in2="blurred" 
+                        scale="70" 
+                        xChannelSelector="R" 
+                        yChannelSelector="G" 
+                      />
+                    </filter>
+                  </defs>
+                </svg>
+              </>
+            )}
+            {colorScheme !== 'liquidgood' && (
+              <MessageSquare className={`h-5 w-5 ${
+                colorScheme === 'liquidglass' ? 'text-white glass-text' : 'text-blue-600'
+              }`} />
+            )}
           </div>
           
           <AnimatePresence>
@@ -194,7 +231,9 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                   <Card className={`${
                     colorScheme === 'liquidglass' 
                       ? 'glass-card' 
-                      : 'bg-white/95 backdrop-blur-sm'
+                      : colorScheme === 'liquidgood'
+                        ? 'glass-card'
+                        : 'bg-white/95 backdrop-blur-sm'
                   } shadow-2xl border-0 select-none w-full min-w-[320px] max-w-[400px]`}
                   style={{ 
                     touchAction: 'none',
@@ -202,7 +241,12 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                     WebkitUserSelect: 'none',
                     WebkitTouchCallout: 'none'
                   }}>
-                    <CardContent className="p-5 md:p-6">
+                    {colorScheme === 'liquidgood' && (
+                      <>
+                        {/* Use same glass styling as liquidglass theme */}
+                      </>
+                    )}
+                    <CardContent className={`p-5 md:p-6 ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`}>
                       <div 
                         className="flex items-start justify-between mb-4 cursor-move"
                         onMouseDown={handleMouseDown}
@@ -215,14 +259,14 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                       >
                         <div className="flex items-start flex-1 pr-3">
                           <div className={`mr-2 mt-1 flex flex-col gap-0.5 ${
-                            colorScheme === 'liquidglass' ? 'opacity-50' : 'opacity-40'
+                            colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'opacity-50' : 'opacity-40'
                           }`}>
                             <div className="w-1 h-1 bg-current rounded-full"></div>
                             <div className="w-1 h-1 bg-current rounded-full"></div>
                             <div className="w-1 h-1 bg-current rounded-full"></div>
                           </div>
                           <h3 className={`font-semibold text-base md:text-lg leading-tight ${
-                            colorScheme === 'liquidglass' ? 'text-white glass-text' : 'text-gray-900'
+                            colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white glass-text' : 'text-gray-900'
                           }`}>
                             {question}
                           </h3>
@@ -237,7 +281,7 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                             onClick();
                           }}
                           className={`flex-shrink-0 p-2 rounded-full transition-colors ${
-                            colorScheme === 'liquidglass' 
+                            colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                               ? 'hover:bg-white/20 text-white/80 hover:text-white' 
                               : 'hover:bg-gray-100 text-gray-500'
                           }`}
@@ -247,7 +291,7 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
                         </button>
                       </div>
                       <p className={`text-sm md:text-base leading-relaxed ${
-                        colorScheme === 'liquidglass' ? 'text-white/90' : 'text-gray-700'
+                        colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white/90' : 'text-gray-700'
                       }`}>
                         {answer}
                       </p>

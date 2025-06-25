@@ -20,7 +20,7 @@ const Index = () => {
   const [activeQuestion, setActiveQuestion] = useState<string | null>(null);
   const [showProjects, setShowProjects] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
-  const [colorScheme, setColorScheme] = useState('liquidglass');
+  const [colorScheme, setColorScheme] = useState('liquidgood');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [slimProjectsSearch, setSlimProjectsSearch] = useState('');
   const [showAllSlimProjects, setShowAllSlimProjects] = useState(false);
@@ -30,13 +30,31 @@ const Index = () => {
   // Mouse tracking for glow effect
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      const mouseGlow = document.querySelector('.mouse-glow') as HTMLElement;
+      if (mouseGlow) {
+        mouseGlow.style.left = e.clientX + 'px';
+        mouseGlow.style.top = e.clientY + 'px';
+      }
     };
 
-    if (colorScheme === 'liquidglass') {
-      window.addEventListener('mousemove', handleMouseMove);
-      return () => window.removeEventListener('mousemove', handleMouseMove);
-    }
+    const handleScroll = () => {
+      if (colorScheme === 'liquidgood') {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.liquidgood-background') as HTMLElement;
+        if (parallax) {
+          const speed = 0.2; // Adjust this value to control parallax speed
+          parallax.style.transform = `translateY(${-scrolled * speed}px) translateZ(0)`;
+        }
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [colorScheme]);
 
   const scrollToProjects = () => {
@@ -51,38 +69,59 @@ const Index = () => {
 
   const getColorSchemeClasses = () => {
     switch (colorScheme) {
-      case 'sunset':
-        return {
-          background: 'bg-gradient-to-br from-orange-50 via-pink-50 to-red-50',
-          accent: 'from-orange-600 to-pink-600',
-          text: 'from-orange-900 via-pink-800 to-red-800',
-          card: 'bg-white/80'
-        };
       case 'liquidglass':
-        return {
-          background: 'liquid-glass-background',
-          accent: 'from-blue-400 to-purple-400',
-          text: 'from-blue-200 via-purple-200 to-cyan-200',
-          card: 'glass-card'
-        };
+        return 'min-h-screen liquid-glass-theme text-white relative overflow-hidden';
+      case 'liquidgood':
+        return 'min-h-screen liquidgood-theme text-white relative overflow-hidden';
+      case 'dark':
+        return 'min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white';
+      case 'red':
+        return 'min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900 text-white';
+      case 'black':
+        return 'min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white';
       case 'professional':
-        return {
-          background: 'bg-gradient-to-br from-gray-50 via-white to-gray-100',
-          accent: 'from-gray-800 to-gray-900',
-          text: 'from-gray-900 to-gray-800',
-          card: 'bg-white/90 border border-gray-200'
-        };
+        return 'min-h-screen bg-gray-50 text-gray-900';
       default:
-        return {
-          background: 'bg-gradient-to-br from-slate-50 via-white to-blue-50',
-          accent: 'from-blue-600 to-purple-600',
-          text: 'from-gray-900 via-blue-800 to-purple-800',
-          card: 'bg-white/80'
-        };
+        return 'min-h-screen bg-white text-gray-900';
     }
   };
 
-  const colors = getColorSchemeClasses();
+  const getTextGradient = () => {
+    switch (colorScheme) {
+      case 'liquidglass':
+      case 'liquidgood':
+        return 'from-white via-gray-100 to-gray-200';
+      case 'dark':
+      case 'red':
+      case 'black':
+        return 'from-white via-gray-100 to-gray-200';
+      case 'professional':
+        return 'from-gray-900 via-blue-800 to-purple-800';
+      default:
+        return 'from-gray-900 via-blue-800 to-purple-800';
+    }
+  };
+
+  const getAccentGradient = () => {
+    switch (colorScheme) {
+      case 'liquidglass':
+        return 'from-blue-400 to-purple-400';
+      case 'liquidgood':
+        return 'from-pink-400 to-orange-400';
+      case 'dark':
+        return 'from-gray-600 to-gray-800';
+      case 'red':
+        return 'from-red-400 to-red-600';
+      case 'black':
+        return 'from-gray-400 to-gray-600';
+      case 'professional':
+        return 'from-gray-800 to-gray-900';
+      default:
+        return 'from-blue-600 to-purple-600';
+    }
+  };
+
+
 
   const floatingQuestions = [
     {
@@ -280,24 +319,50 @@ const Index = () => {
   }, []);
 
   return (
-    <div className={`min-h-screen ${colorScheme === 'liquidglass' ? 'liquid-glass-theme' : ''} ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`} ref={containerRef}>
+    <div className={getColorSchemeClasses()} ref={containerRef}>
       {/* Color Scheme Toggle in Top Right */}
       <ColorSchemeToggle onSchemeChange={setColorScheme} />
+      
+      {/* Glass Effects Test Section - Temporary
+      {(colorScheme === 'liquidglass' || colorScheme === 'liquidgood') && (
+        <div className="fixed top-20 right-4 z-40 space-y-4">
+          <div className="text-xs text-white/70 mb-2">Glass Effects Test:</div>
+          <GlassButton variant={colorScheme === 'liquidgood' ? 'liquidgood' : 'enhanced'} size="sm">
+            {colorScheme === 'liquidgood' ? 'Liquid Good Button' : 'Enhanced Button'}
+          </GlassButton>
+          <GlassCard variant={colorScheme === 'liquidgood' ? 'liquidgood' : 'enhanced'} size="sm" className="p-3 max-w-xs">
+            <div className="text-white text-sm">{colorScheme === 'liquidgood' ? 'Liquid Good Card' : 'Enhanced Glass Card'}</div>
+          </GlassCard>
+        </div>
+      )} */}
       
       {/* Liquid Glass Background with Mouse Glow */}
       {colorScheme === 'liquidglass' && (
         <>
           <div className="liquid-glass-background" />
           <div 
-            className="pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-1xl ease-out z-0"
+            className="mouse-glow pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-1xl ease-out z-0"
             style={{
               background: 'radial-gradient(circle, rgba(59, 130, 246, 0.6) 0%, rgba(168, 85, 247, 0.4) 50%, rgba(236, 72, 153, 0.2) 70%, transparent 25%)',
-              left: mousePos.x - 192,
-              top: mousePos.y - 192,
+              transform: 'translate(-50%, -50%)',
               filter: 'blur(40px)',
             }}
           />
-          
+        </>
+      )}
+      
+      {/* Liquidgood Background with Mouse Glow */}
+      {colorScheme === 'liquidgood' && (
+        <>
+          <div className="liquidgood-background" />
+          <div 
+            className="mouse-glow pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-1xl ease-out z-0"
+            style={{
+              background: 'radial-gradient(circle, rgba(236, 72, 153, 0.6) 0%, rgba(251, 146, 60, 0.4) 50%, rgba(252, 211, 77, 0.2) 70%, transparent 25%)',
+              transform: 'translate(-50%, -50%)',
+              filter: 'blur(40px)',
+            }}
+          />
         </>
       )}
       
@@ -334,30 +399,30 @@ const Index = () => {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="mb-2"
             >
-              <h1 className={`text-4xl md:text-3xl font-thin bg-gradient-to-r ${colors.text} bg-clip-text text-transparent mb-1 sm:mb-2`}>
+              <h1 className={`text-4xl md:text-3xl font-thin bg-gradient-to-r ${getTextGradient()} bg-clip-text text-transparent mb-1 sm:mb-2`}>
                 Siva Tayi
               </h1>
             </motion.div>
 
             <h2 className={`text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl 2xl:text-[10rem] font-bold mb-4 sm:mb-6 mt-1 sm:mt-8 leading-[0.9] sm:leading-tight ${
-              colorScheme === 'liquidglass' 
+              colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                 ? 'glass-text text-shadow-lg' 
-                : `bg-gradient-to-r ${colors.text} bg-clip-text text-transparent`
+                : `bg-gradient-to-r ${getTextGradient()} bg-clip-text text-transparent`
             }`}>
               Ideate.<br />Strategize.<br />Launch.
             </h2>
 
             
-            <p className={`text-lg md:text-xl mb-4 leading-relaxed ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mb-20 mt- mx-auto`}>
-            The future of product and design is not human or AI—it’s human with AI. 
+            <p className={`text-lg md:text-xl mb-4 leading-relaxed ${colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mb-20 mt- mx-auto`}>
+            The future of product and design is not human or AI—it's human with AI. 
             <br />I am geared to build organizations where designers, technologists, and AI agents co-create, learn from each other, and deliver outcomes neither could achieve alone.
             </p>
 
             
             <p className={`text-lg md:text-xl font-semibold mb-20 ${
-              colorScheme === 'liquidglass' 
+              colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                 ? 'text-white text-shadow-lg' 
-                : `bg-gradient-to-r ${colors.accent} bg-clip-text text-transparent`
+                : `bg-gradient-to-r ${getAccentGradient()} bg-clip-text text-transparent`
             }`}>
               Human-Centered Design • AI-First Product Strategy • Idea to Product Delivery 
             </p>
@@ -367,12 +432,12 @@ const Index = () => {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
             >
-              {colorScheme === 'liquidglass' ? (
-                <GlassButton size="lg" className="w-full sm:w-auto" onClick={scrollToProjects}>
+              {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
+                <GlassButton variant={colorScheme === 'liquidgood' ? 'liquidgood' : 'enhanced'} size="lg" className="w-full sm:w-auto" onClick={scrollToProjects}>
                   What I have been up to
                 </GlassButton>
               ) : (
-              <Button size="lg" className={`w-full sm:w-auto px-8 py-4 text-lg bg-gradient-to-r ${colors.accent} hover:opacity-90 ${
+              <Button size="lg" className={`w-full sm:w-auto px-8 py-4 text-lg bg-gradient-to-r ${getAccentGradient()} hover:opacity-90 ${
                 colorScheme === 'professional' ? 'text-white shadow-sm' : 'text-white'
               }`} onClick={scrollToProjects}>
                 View My Work
@@ -401,8 +466,8 @@ const Index = () => {
             transition={{ duration: 0.6 }}
             className="flex items-center justify-center mb-8"
           >
-            {colorScheme === 'liquidglass' ? (
-              <GlassCard className="inline-flex items-center gap-3 px-6 py-3">
+            {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
+              <GlassCard variant={colorScheme === 'liquidgood' ? 'liquidgood' : 'enhanced'} className="inline-flex items-center gap-3">
                 <Trophy className="h-6 w-6 glass-text" />
                 <span className="font-bold text-base glass-text">Generative AI Design Hackathon Winner</span>
                 <Award className="h-6 w-6 glass-text" />
@@ -427,10 +492,10 @@ const Index = () => {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`}>
+            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white' : 'text-gray-900'}`}>
               Recent Projects
             </h2>
-            <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
+            <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
               From concept to market: How I bring ideas to life through strategic design, 
               vibe coding expertise, and systematic delivery approaches.
             </p>
@@ -460,7 +525,7 @@ const Index = () => {
       </section>
 
       {/* Additional Projects - Slim Cards */}
-      <section className={`py-16 px-6 ${colorScheme === 'liquidglass' ? 'bg-gray-900/10' : colorScheme === 'professional' ? 'bg-gray-50/30' : 'bg-gray-50/50'}`}>
+      <section className={`py-16 px-6 ${colorScheme === 'liquidglass' ? 'bg-gray-900/10' : colorScheme === 'professional' ? 'bg-gray-50/30' : 'bg-gray-50/5'}`}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -478,24 +543,63 @@ const Index = () => {
             {/* Search Bar */}
             <div className="max-w-md mx-auto">
               <div className="relative">
-                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 ${
-                  colorScheme === 'liquidglass' ? 'text-gray-400' : 'text-gray-500'
+                <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 z-10 ${
+                  colorScheme === 'liquidglass' ? 'text-gray-400' : colorScheme === 'liquidgood' ? 'text-white/70' : 'text-gray-500'
                 }`} />
-                <input
-                  type="text"
-                  placeholder="Search projects by title, description, or tags..."
-                  value={slimProjectsSearch}
-                  onChange={(e) => setSlimProjectsSearch(e.target.value)}
-                  className={`
-                    w-full pl-10 pr-4 py-3 rounded-xl border transition-all duration-300 focus:outline-none focus:ring-2
-                    ${colorScheme === 'liquidglass' 
-                      ? 'bg-white/10 backdrop-blur-lg border-white/20 text-white placeholder-gray-400 focus:ring-blue-400/50 focus:border-white/40' 
-                      : colorScheme === 'professional'
-                        ? 'bg-white border-gray-200 text-gray-900 placeholder-gray-500 focus:ring-blue-500/20 focus:border-blue-500'
-                        : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-blue-500/20 focus:border-blue-500'
-                    }
-                  `}
-                />
+                {colorScheme === 'liquidgood' ? (
+                  <div className="relative liquidgood-glass-input overflow-hidden rounded-xl">
+                    <div className="liquidgood-glass-filter"></div>
+                    <div className="liquidgood-glass-overlay"></div>
+                    <div className="liquidgood-glass-specular"></div>
+                    
+                    {/* SVG Filter */}
+                    <svg style={{ display: 'none' }}>
+                      <defs>
+                        <filter id="liquidgood-dist-search" x="0%" y="0%" width="100%" height="100%">
+                          <feTurbulence 
+                            type="fractalNoise" 
+                            baseFrequency="0.008 0.008" 
+                            numOctaves="2" 
+                            seed="92" 
+                            result="noise" 
+                          />
+                          <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                          <feDisplacementMap 
+                            in="SourceGraphic" 
+                            in2="blurred" 
+                            scale="70" 
+                            xChannelSelector="R" 
+                            yChannelSelector="G" 
+                          />
+                        </filter>
+                      </defs>
+                    </svg>
+                    
+                    <input
+                      type="text"
+                      placeholder="Search projects by title, description, or tags..."
+                      value={slimProjectsSearch}
+                      onChange={(e) => setSlimProjectsSearch(e.target.value)}
+                      className="relative z-10 w-full pl-10 pr-4 py-3 bg-transparent border-none text-white placeholder-white/60 focus:outline-none focus:ring-0 transition-all duration-300"
+                    />
+                  </div>
+                ) : (
+                  <input
+                    type="text"
+                    placeholder="Search projects by title, description, or tags..."
+                    value={slimProjectsSearch}
+                    onChange={(e) => setSlimProjectsSearch(e.target.value)}
+                    className={`
+                      w-full pl-10 pr-4 py-3 rounded-xl border transition-all duration-300 focus:outline-none focus:ring-2
+                      ${colorScheme === 'liquidglass' 
+                        ? 'bg-white/10 backdrop-blur-lg border-white/20 text-white placeholder-gray-400 focus:ring-blue-400/50 focus:border-white/40' 
+                        : colorScheme === 'professional'
+                          ? 'bg-white border-gray-200 text-gray-900 placeholder-gray-500 focus:ring-blue-500/20 focus:border-blue-500'
+                          : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 placeholder-gray-500 focus:ring-blue-500/20 focus:border-blue-500'
+                      }
+                    `}
+                  />
+                )}
               </div>
             </div>
           </motion.div>
@@ -537,9 +641,11 @@ const Index = () => {
                   px-6 py-3 rounded-xl border transition-all duration-300 hover:scale-105
                   ${colorScheme === 'liquidglass' 
                     ? 'bg-white/10 backdrop-blur-lg border-white/20 text-white hover:bg-white/15 hover:border-white/30' 
-                    : colorScheme === 'professional'
-                      ? 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50 hover:border-gray-300'
-                      : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 hover:bg-white hover:border-gray-300'
+                    : colorScheme === 'liquidgood'
+                      ? 'relative bg-white/90 backdrop-blur-sm border border-white/20 text-gray-900 hover:bg-white/5 hover:border-pink-300 liquidgood-glass-button'
+                      : colorScheme === 'professional'
+                        ? 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50 hover:border-gray-300'
+                        : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 hover:bg-white hover:border-gray-300'
                   }
                 `}
                 whileHover={{ y: -2 }}
@@ -559,9 +665,11 @@ const Index = () => {
                   px-6 py-3 rounded-xl border transition-all duration-300 hover:scale-105
                   ${colorScheme === 'liquidglass' 
                     ? 'bg-white/10 backdrop-blur-lg border-white/20 text-white hover:bg-white/15 hover:border-white/30' 
-                    : colorScheme === 'professional'
-                      ? 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50 hover:border-gray-300'
-                      : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 hover:bg-white hover:border-gray-300'
+                    : colorScheme === 'liquidgood'
+                      ? 'relative bg-white/90 backdrop-blur-sm border border-white/20 text-gray-900 hover:bg-white/95 hover:border-pink-300 liquidgood-glass-button'
+                      : colorScheme === 'professional'
+                        ? 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50 hover:border-gray-300'
+                        : 'bg-white/80 backdrop-blur-sm border-gray-200/50 text-gray-900 hover:bg-white hover:border-gray-300'
                   }
                 `}
                 whileHover={{ y: -2 }}
@@ -586,25 +694,77 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Learning Section */}
-      <section className={`py-20 px-6 ${colorScheme === 'liquidglass' ? 'bg-gray-800/20' : colorScheme === 'professional' ? 'bg-gray-50/50' : 'bg-gradient-to-r from-gray-50 to-blue-50'}`}>
+      {/* Explorative Learning Journey Section */}
+      <section className={`py-20 px-6 ${colorScheme === 'liquidglass' ? 'bg-gray-800/20' : colorScheme === 'liquidgood' ? 'bg-transparent' : colorScheme === 'professional' ? 'bg-gray-50/50' : 'bg-gradient-to-r from-gray-50 to-blue-50'}`}>
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`}>
-              Explorative Learning Journey
-            </h2>
-            <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
-              Average of 350 hours invested in learning per year through courses, experiment-based learning, 
-              and systematic implementation strategy to reinforce knowledge.
-            </p>
-          </motion.div>
+          {colorScheme === 'liquidgood' ? (
+            <div className="relative liquidgood-glass-card overflow-hidden rounded-3xl p-12">
+              <div className="liquidgood-glass-filter"></div>
+              <div className="liquidgood-glass-overlay"></div>
+              <div className="liquidgood-glass-specular"></div>
+              
+              {/* SVG Filter */}
+              <svg style={{ display: 'none' }}>
+                <defs>
+                  <filter id="liquidgood-dist-learning" x="0%" y="0%" width="100%" height="100%">
+                    <feTurbulence 
+                      type="fractalNoise" 
+                      baseFrequency="0.008 0.008" 
+                      numOctaves="2" 
+                      seed="92" 
+                      result="noise" 
+                    />
+                    <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                    <feDisplacementMap 
+                      in="SourceGraphic" 
+                      in2="blurred" 
+                      scale="70" 
+                      xChannelSelector="R" 
+                      yChannelSelector="G" 
+                    />
+                  </filter>
+                </defs>
+              </svg>
+              
+              <div className="liquidgood-glass-content relative z-10">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-center mb-16"
+                >
+                  <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+                    Explorative Learning Journey
+                  </h2>
+                  <p className="text-xl max-w-3xl mx-auto text-white/80">
+                    Average of 350 hours invested in learning per year through courses, experiment-based learning, 
+                    and systematic implementation strategy to reinforce knowledge.
+                  </p>
+                </motion.div>
 
-          <ExplorativeLearningJourney colorScheme={colorScheme} />
+                <ExplorativeLearningJourney colorScheme={colorScheme} />
+              </div>
+            </div>
+          ) : (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-center mb-16"
+              >
+                <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${colorScheme === 'liquidglass' ? 'text-white' : 'text-gray-900'}`}>
+                  Explorative Learning Journey
+                </h2>
+                <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
+                  Average of 350 hours invested in learning per year through courses, experiment-based learning, 
+                  and systematic implementation strategy to reinforce knowledge.
+                </p>
+              </motion.div>
+
+              <ExplorativeLearningJourney colorScheme={colorScheme} />
+            </>
+          )}
         </div>
       </section>
 
@@ -633,12 +793,46 @@ const Index = () => {
                 className={`${
                   colorScheme === 'liquidglass' 
                     ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl text-white' 
-                    : colorScheme === 'professional'
-                      ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
-                      : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
+                    : colorScheme === 'liquidgood'
+                      ? 'relative liquidgood-glass-button text-white overflow-hidden'
+                      : colorScheme === 'professional'
+                        ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
+                        : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
                 } p-4 rounded-2xl transition-all duration-300 group hover:scale-105`}
               >
-                <svg className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                {/* Glass layers for liquidgood */}
+                {colorScheme === 'liquidgood' && (
+                  <>
+                    <div className="liquidgood-glass-filter"></div>
+                    <div className="liquidgood-glass-overlay"></div>
+                    <div className="liquidgood-glass-specular"></div>
+                    
+                    {/* SVG Filter */}
+                    <svg style={{ display: 'none' }}>
+                      <defs>
+                        <filter id="liquidgood-dist-linkedin" x="0%" y="0%" width="100%" height="100%">
+                          <feTurbulence 
+                            type="fractalNoise" 
+                            baseFrequency="0.008 0.008" 
+                            numOctaves="2" 
+                            seed="92" 
+                            result="noise" 
+                          />
+                          <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                          <feDisplacementMap 
+                            in="SourceGraphic" 
+                            in2="blurred" 
+                            scale="70" 
+                            xChannelSelector="R" 
+                            yChannelSelector="G" 
+                          />
+                        </filter>
+                      </defs>
+                    </svg>
+                  </>
+                )}
+                
+                <svg className={`w-6 h-6 group-hover:scale-110 transition-transform duration-200 ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`} fill="currentColor" viewBox="0 0 24 24">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                 </svg>
               </a>
@@ -651,12 +845,46 @@ const Index = () => {
                 className={`${
                   colorScheme === 'liquidglass' 
                     ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl text-white' 
-                    : colorScheme === 'professional'
-                      ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
-                      : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
+                    : colorScheme === 'liquidgood'
+                      ? 'relative liquidgood-glass-button text-white overflow-hidden'
+                      : colorScheme === 'professional'
+                        ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50 text-gray-700'
+                        : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white text-gray-700'
                 } p-4 rounded-2xl transition-all duration-300 group hover:scale-105`}
               >
-                <svg className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" fill="currentColor" viewBox="0 0 24 24">
+                {/* Glass layers for liquidgood */}
+                {colorScheme === 'liquidgood' && (
+                  <>
+                    <div className="liquidgood-glass-filter"></div>
+                    <div className="liquidgood-glass-overlay"></div>
+                    <div className="liquidgood-glass-specular"></div>
+                    
+                    {/* SVG Filter */}
+                    <svg style={{ display: 'none' }}>
+                      <defs>
+                        <filter id="liquidgood-dist-twitter" x="0%" y="0%" width="100%" height="100%">
+                          <feTurbulence 
+                            type="fractalNoise" 
+                            baseFrequency="0.008 0.008" 
+                            numOctaves="2" 
+                            seed="92" 
+                            result="noise" 
+                          />
+                          <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                          <feDisplacementMap 
+                            in="SourceGraphic" 
+                            in2="blurred" 
+                            scale="70" 
+                            xChannelSelector="R" 
+                            yChannelSelector="G" 
+                          />
+                        </filter>
+                      </defs>
+                    </svg>
+                  </>
+                )}
+                
+                <svg className={`w-6 h-6 group-hover:scale-110 transition-transform duration-200 ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`} fill="currentColor" viewBox="0 0 24 24">
                   <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
                 </svg>
               </a>
@@ -684,68 +912,128 @@ const Index = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2, duration: 0.6, ease: "easeOut" }}
       >
-        <motion.button
-          onClick={() => {
-            const event = new CustomEvent('openAskMeAnything');
-            window.dispatchEvent(event);
-          }}
-          className={`${
-            colorScheme === 'liquidglass' 
-              ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl' 
-              : colorScheme === 'professional'
-                ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50'
-                : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white'
-          } px-6 py-3 rounded-2xl transition-all duration-300 flex items-center gap-3 group`}
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <motion.div
+        {colorScheme === 'liquidgood' ? (
+          <motion.button
+            onClick={() => {
+              const event = new CustomEvent('openAskMeAnything');
+              window.dispatchEvent(event);
+            }}
+            className="relative liquidgood-glass-button px-6 py-3 rounded-2xl flex items-center gap-3 group overflow-hidden"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <div className="liquidgood-glass-filter"></div>
+            <div className="liquidgood-glass-overlay"></div>
+            <div className="liquidgood-glass-specular"></div>
+            
+            {/* SVG Filter */}
+            <svg style={{ display: 'none' }}>
+              <defs>
+                <filter id="liquidgood-dist-askme" x="0%" y="0%" width="100%" height="100%">
+                  <feTurbulence 
+                    type="fractalNoise" 
+                    baseFrequency="0.008 0.008" 
+                    numOctaves="2" 
+                    seed="92" 
+                    result="noise" 
+                  />
+                  <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                  <feDisplacementMap 
+                    in="SourceGraphic" 
+                    in2="blurred" 
+                    scale="70" 
+                    xChannelSelector="R" 
+                    yChannelSelector="G" 
+                  />
+                </filter>
+              </defs>
+            </svg>
+            
+            <div className="liquidgood-glass-content flex items-center gap-3 relative z-10" style={{ padding: 0 }}>
+              <motion.div
+                className="text-white"
+                animate={{ 
+                  rotate: [0, 10, -10, 0],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  duration: 2, 
+                  repeat: Infinity,
+                  repeatDelay: 3
+                }}
+              >
+                <MessageSquare className="h-5 w-5" />
+              </motion.div>
+              
+              <span className="font-medium text-white group-hover:translate-x-0.5 transition-transform duration-200">
+                Ask me anything
+              </span>
+            </div>
+          </motion.button>
+        ) : (
+          <motion.button
+            onClick={() => {
+              const event = new CustomEvent('openAskMeAnything');
+              window.dispatchEvent(event);
+            }}
             className={`${
+              colorScheme === 'liquidglass' 
+                ? 'bg-white/15 backdrop-blur-lg border border-white/30 shadow-xl hover:bg-white/20 hover:border-white/40 hover:shadow-2xl' 
+                : colorScheme === 'professional'
+                  ? 'bg-white border border-gray-200 shadow-lg hover:shadow-xl hover:bg-gray-50'
+                  : 'bg-white/90 backdrop-blur-sm border border-gray-200 shadow-lg hover:shadow-xl hover:bg-white'
+            } px-6 py-3 rounded-2xl transition-all duration-300 flex items-center gap-3 group`}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <motion.div
+              className={`${
+                colorScheme === 'liquidglass' 
+                  ? 'text-white' 
+                  : colorScheme === 'professional'
+                    ? 'text-blue-600'
+                    : 'text-blue-600'
+              }`}
+              animate={{ 
+                rotate: [0, 10, -10, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ 
+                duration: 2, 
+                repeat: Infinity,
+                repeatDelay: 3
+              }}
+            >
+              <MessageSquare className="h-5 w-5" />
+            </motion.div>
+            
+            <span className={`font-medium ${
               colorScheme === 'liquidglass' 
                 ? 'text-white' 
                 : colorScheme === 'professional'
-                  ? 'text-blue-600'
-                  : 'text-blue-600'
-            }`}
-            animate={{ 
-              rotate: [0, 10, -10, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{ 
-              duration: 2, 
-              repeat: Infinity,
-              repeatDelay: 3
-            }}
-          >
-            <MessageSquare className="h-5 w-5" />
-          </motion.div>
-          
-          <span className={`font-medium ${
-            colorScheme === 'liquidglass' 
-              ? 'text-white' 
-              : colorScheme === 'professional'
-                ? 'text-gray-800'
-                : 'text-gray-800'
-          } group-hover:translate-x-0.5 transition-transform duration-200`}>
-            Ask me anything
-          </span>
-          
-          {/* Animated glow effect for liquid glass */}
-          {colorScheme === 'liquidglass' && (
-            <motion.div
-              className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-sm -z-10"
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-                scale: [1, 1.05, 1]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          )}
-        </motion.button>
+                  ? 'text-gray-800'
+                  : 'text-gray-800'
+            } group-hover:translate-x-0.5 transition-transform duration-200`}>
+              Ask me anything
+            </span>
+            
+            {/* Animated glow effect for liquid glass */}
+            {colorScheme === 'liquidglass' && (
+              <motion.div
+                className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 blur-sm -z-10"
+                animate={{
+                  opacity: [0.3, 0.6, 0.3],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            )}
+          </motion.button>
+        )}
       </motion.div>
       
       <AskMeAnything colorScheme={colorScheme} />

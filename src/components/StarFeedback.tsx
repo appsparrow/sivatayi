@@ -116,7 +116,7 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
   const getStarColor = (starIndex: number) => {
     const currentRating = hoverRating || rating;
     
-    if (colorScheme === 'liquidglass') {
+    if (colorScheme === 'liquidglass' || colorScheme === 'liquidgood') {
       return starIndex <= currentRating 
         ? 'text-yellow-300 drop-shadow-sm' 
         : 'text-white/40';
@@ -132,7 +132,7 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
   };
 
   const getTextColor = () => {
-    if (colorScheme === 'liquidglass') {
+    if (colorScheme === 'liquidglass' || colorScheme === 'liquidgood') {
       return 'text-white/90';
     } else if (colorScheme === 'professional') {
       return 'text-gray-700';
@@ -144,6 +144,8 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
   const getCardStyle = () => {
     if (colorScheme === 'liquidglass') {
       return 'bg-white/5 backdrop-blur-md border border-white/10 shadow-md';
+    } else if (colorScheme === 'liquidgood') {
+      return 'relative liquidgood-glass-card overflow-hidden';
     } else if (colorScheme === 'professional') {
       return 'bg-white border border-gray-100 shadow-sm';
     } else {
@@ -153,7 +155,39 @@ const StarFeedback = ({ colorScheme = 'default', onRatingChange }: StarFeedbackP
 
   return (
     <div className={`${getCardStyle()} rounded-xl p-4 max-w-xs mx-auto transition-all duration-300`}>
-      <div className="text-center">
+      {/* Glass layers for liquidgood */}
+      {colorScheme === 'liquidgood' && (
+        <>
+          <div className="liquidgood-glass-filter"></div>
+          <div className="liquidgood-glass-overlay"></div>
+          <div className="liquidgood-glass-specular"></div>
+          
+          {/* SVG Filter */}
+          <svg style={{ display: 'none' }}>
+            <defs>
+              <filter id="liquidgood-dist-rating" x="0%" y="0%" width="100%" height="100%">
+                <feTurbulence 
+                  type="fractalNoise" 
+                  baseFrequency="0.008 0.008" 
+                  numOctaves="2" 
+                  seed="92" 
+                  result="noise" 
+                />
+                <feGaussianBlur in="noise" stdDeviation="2" result="blurred" />
+                <feDisplacementMap 
+                  in="SourceGraphic" 
+                  in2="blurred" 
+                  scale="70" 
+                  xChannelSelector="R" 
+                  yChannelSelector="G" 
+                />
+              </filter>
+            </defs>
+          </svg>
+        </>
+      )}
+      
+      <div className={`text-center ${colorScheme === 'liquidgood' ? 'relative z-10' : ''}`}>
         {/* Stars */}
         <div className="flex justify-center gap-1 mb-3">
           {[1, 2, 3, 4, 5].map((star) => (

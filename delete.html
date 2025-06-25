@@ -2,121 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Meme Comments Overlay</title>
+  <title>Deposit Account Application - Master Flow Sitemap</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: #181818;
-      color: #fff;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      min-height: 100vh;
-    }
-    .comment-overlay {
-      position: fixed;
-      top: 0;
-      right: 0;
-      width: 340px;
-      height: 100vh;
-      background: rgba(30,30,30,0.92);
-      box-shadow: -2px 0 12px #0008;
-      z-index: 9999;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      pointer-events: none;
-    }
-    .scrolling-comments {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      animation: scrollComments 30s linear infinite;
-    }
-    .comment {
-      background: #23272f;
-      border-radius: 12px;
-      padding: 16px 20px;
-      margin: 0 16px;
-      font-size: 1.05rem;
-      color: #e0e0e0;
-      box-shadow: 0 2px 8px #0003;
-      opacity: 0.95;
-      border-left: 4px solid #4f8cff;
-    }
-    @keyframes scrollComments {
-      0% { transform: translateY(100%); }
-      100% { transform: translateY(-110%); }
-    }
-    .overlay-title {
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f8f9fa; color: #222; }
+    .sitemap { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
+    .sitemap h2 { margin-top: 0; color: #1a7f37; }
+    ul { list-style: none; padding-left: 24px; }
+    li { margin: 8px 0; position: relative; }
+    li:before {
+      content: '';
       position: absolute;
-      top: 18px;
-      right: 0;
-      left: 0;
-      text-align: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #4f8cff;
-      letter-spacing: 1px;
-      text-shadow: 0 2px 8px #000a;
-      z-index: 2;
-      pointer-events: none;
+      left: -16px;
+      top: 10px;
+      width: 10px;
+      height: 2px;
+      background: #1a7f37;
+      border-radius: 1px;
     }
+    .branch { font-weight: bold; color: #1a7f37; }
+    .sub { color: #555; }
   </style>
 </head>
 <body>
-  <div class="comment-overlay">
-    <div class="overlay-title">
-      When you ask AI for a banner and it gives you... something
-    </div>
-    <div class="scrolling-comments" id="scrollingComments">
-      <!-- Comments will be injected here -->
-    </div>
+  <div class="sitemap">
+    <h2>Deposit Account Application - Master Flow</h2>
+    <ul>
+      <li class="branch">Start
+        <ul>
+          <li class="branch">Product Selection
+            <ul>
+              <li class="sub">Login / Create Account</li>
+              <li class="sub">Data Transfer from bank.com</li>
+            </ul>
+          </li>
+          <li class="branch">Welcome & Checklist
+            <ul>
+              <li class="sub">Timeline & Eligibility</li>
+              <li class="sub">Required Docs Checklist</li>
+              <li class="sub">Support Options</li>
+            </ul>
+          </li>
+          <li class="branch">Application Flow
+            <ul>
+              <li class="sub">Personal Info</li>
+              <li class="sub">Owners Info (repeatable)</li>
+              <li class="sub">Business Details</li>
+              <li class="sub">Business Goals & Needs</li>
+              <li class="sub">Document Upload</li>
+              <li class="sub">Review & Edit</li>
+            </ul>
+          </li>
+          <li class="branch">Application Submission
+            <ul>
+              <li class="sub">Confirmation Screen</li>
+              <li class="sub">Email Notification</li>
+              <li class="sub">Status Tracker</li>
+            </ul>
+          </li>
+          <li class="branch">Decisioning
+            <ul>
+              <li class="sub">Auto-Approve</li>
+              <li class="sub">Manual Review (Banker)</li>
+              <li class="sub">Off-Ramp (High Risk)</li>
+            </ul>
+          </li>
+          <li class="branch">Funding
+            <ul>
+              <li class="sub">Select Funding Method</li>
+              <li class="sub">Internal Transfer</li>
+              <li class="sub">External Transfer (ACH, Card, etc.)</li>
+              <li class="sub">Funding Review & Confirmation</li>
+              <li class="sub">Funding Success</li>
+            </ul>
+          </li>
+          <li class="branch">Add-Ons & Post-Approval
+            <ul>
+              <li class="sub">Add-On Products (Checks, Debit Card)</li>
+              <li class="sub">Authorized Signers (Add, Invite, Status)</li>
+              <li class="sub">Continue Onboarding</li>
+              <li class="sub">Congrats Page</li>
+            </ul>
+          </li>
+          <li class="branch">Banker Portal (Admin)
+            <ul>
+              <li class="sub">Application Status Dashboard</li>
+              <li class="sub">Application Kickstart</li>
+              <li class="sub">Application Review (Approve/Reject, Notes)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
   </div>
-  <script>
-    const comments = [
-      "We are real, party’s over buddy.",
-      "O vey! AI did it again.",
-      "LOL, AI's idea of a banner is... unique.",
-      "POV: You let a bot design your graphics.",
-      "Social media companies could fix this, but why would they?",
-      "That’s probably the AI boosting its own art.",
-      "AI using the same tech for banners and propaganda.",
-      "Pro tip: AI banners get an organic boost if everyone hates them.",
-      "You desperate bruh 😂",
-      "If they’re doing it, you gotta believe you’re doing it too.",
-      "US has been doing this for years, but with more pixels.",
-      "Lol, this is basically the IOF of banners.",
-      "Always lying about things lol (including banners).",
-      "More AI lies, more banner chaos.",
-      "Anyone with a blue checkmark is probably a bot. Or a banner.",
-      "At least half of these banners are from bots.",
-      "AI banner: Expectation vs. Reality.",
-      "Asked AI for a banner. Got abstract art instead.",
-      "Me: 'Make me a banner.' AI: 'Say less.'",
-      "When you wanted a banner but AI wanted to express itself.",
-      "Banner requested. Chaos delivered.",
-      "When you let AI cook and it serves this.",
-      "Told AI to make a banner. AI: 'Bet.'",
-      "Me: 'Banner, please.' AI: 'Hold my neural net.'",
-      "AI banner: It's a process.",
-      "AI banner: Close enough?",
-      "AI banner: The future is messy.",
-      "This AI banner is my life now.",
-      "AI banner: Embrace the chaos.",
-      "AI banner: The AI did its best."
-    ];
 
-    // Duplicate comments to make the scroll seamless
-    const allComments = [...comments, ...comments.slice(0, 10)];
 
-    const container = document.getElementById('scrollingComments');
-    allComments.forEach(comment => {
-      const div = document.createElement('div');
-      div.className = 'comment';
-      div.textContent = comment;
-      container.appendChild(div);
-    });
-  </script>
+  <table>
+    <thead>
+      <tr>
+        <th>Flow / Epic</th>
+        <th>Business Value</th>
+        <th>Scope</th>
+        <th>Dependencies</th>
+        <th>Assumptions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Product Selection & Auth</td>
+        <td>Clarity for the applicant on which deposit product is best for their situation.</td>
+        <td>Existing & new customers, Deposit products</td>
+        <td>Okta integration, product data from bank.com, SSO</td>
+        <td>Data transfer from bank.com is reliable; Okta is SSO; product catalog is up to date</td>
+      </tr>
+      <!-- Repeat for each flow/epic as above -->
+    </tbody>
+  </table>
+
 </body>
 </html>
