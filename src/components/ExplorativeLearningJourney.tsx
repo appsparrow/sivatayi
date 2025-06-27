@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,6 +24,25 @@ interface ExplorativeLearningJourneyProps {
 const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLearningJourneyProps) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showAllCourses, setShowAllCourses] = useState(false);
+
+  // Prevent body scrolling when modal is open
+  useEffect(() => {
+    if (showAllCourses) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
+  }, [showAllCourses]);
 
   const getPastelGlassColor = (categoryName: string) => {
     const baseGlass = colorScheme === 'liquidgood' ? 'liquidgood-glass-pill' : 'liquid-glass-pill';
@@ -206,13 +225,11 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
       </AnimatePresence>
 
       {/* View All Button */}
-      <div className="text-center">
+      {/* <div className="text-center">
         {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
           <button
             onClick={() => setShowAllCourses(true)}
-            className={`${
-              colorScheme === 'liquidgood' ? 'liquidgood-glass-button' : 'bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/40'
-            } text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto hover:shadow-lg`}
+            className="bg-white/10 hover:bg-white/20 border border-white/30 hover:border-white/40 text-white px-6 py-3 rounded-lg backdrop-blur-sm transition-all duration-200 flex items-center gap-2 mx-auto hover:shadow-lg"
           >
             <ExternalLink className="h-4 w-4" />
             Learning Updates
@@ -231,7 +248,7 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
             View All Courses & Certifications
           </Button>
         )}
-      </div>
+      </div> */}
 
       {/* All Courses Modal */}
       <AnimatePresence>
@@ -240,46 +257,34 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
             onClick={() => setShowAllCourses(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
+              initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
+              exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className={`w-full max-w-4xl max-h-[80vh] overflow-y-auto shadow-2xl ${
-                colorScheme === 'liquidglass' 
+              className={`w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl ${
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
                   ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] m-4' 
-                  : colorScheme === 'liquidgood'
-                    ? 'bg-white/10 backdrop-blur-lg border border-white/20 rounded-[20px] m-4'
-                    : colorScheme === 'dark' 
-                      ? 'bg-gray-900 rounded-2xl' 
-                      : 'bg-white rounded-2xl'
+                  : colorScheme === 'dark' 
+                    ? 'bg-gray-900 rounded-2xl' 
+                    : 'bg-white rounded-2xl'
               }`}
             >
-              {/* Glass layers for liquidgood - same as liquidglass */}
-              {(colorScheme === 'liquidglass' || colorScheme === 'liquidgood') && (
-                <>
-                  {/* No additional glass layers needed - using backdrop-blur directly */}
-                </>
-              )}
-              
               {/* Header */}
               <div className={`sticky top-0 z-20 flex items-center justify-between p-6 border-b backdrop-blur-sm ${
                 colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
-                  ? 'bg-transparent border-white/20 rounded-t-[20px]' 
-                  : colorScheme === 'dark' 
-                    ? 'border-gray-700 bg-gray-900/95 rounded-t-2xl' 
-                    : 'bg-white/95 rounded-t-2xl'
+                  ? 'bg-white/10 backdrop-blur-md border-white/20 rounded-t-[20px]' 
+                  : 'bg-white/95 dark:bg-gray-900/95 rounded-t-2xl'
               }`}>
                 <h2 className={`text-2xl font-bold ${
                   colorScheme === 'liquidglass' || colorScheme === 'liquidgood' || colorScheme === 'dark' 
                     ? 'text-white' 
                     : 'text-gray-900'
                 }`}>
-                  Learning Portfolio ({allCourses.length} Courses)
+                  Learning Portfolio 
                 </h2>
                 {colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? (
                   <button

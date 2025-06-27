@@ -14,10 +14,22 @@ interface FloatingQuestionProps {
 }
 
 const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorScheme = 'default' }: FloatingQuestionProps) => {
-  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Track mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Native touch/mouse event handlers for better mobile support
   const handleDragStart = (clientX: number, clientY: number) => {
@@ -35,7 +47,6 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
     const newY = clientY - dragStart.y;
     
     // Constrain to viewport - make responsive based on screen size
-    const isMobile = window.innerWidth <= 768;
     const modalWidth = isMobile ? Math.min(350, window.innerWidth - 40) : 400;
     const modalHeight = isMobile ? 300 : 400;
     
@@ -109,7 +120,6 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
   // Reset position to center on mobile when modal opens
   useEffect(() => {
     if (isActive) {
-      const isMobile = window.innerWidth <= 768;
       if (isMobile) {
         // Force center the modal on mobile - override any previous drag position
         setDragPosition({
@@ -121,7 +131,7 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
         setDragPosition({ x: 0, y: 0 });
       }
     }
-  }, [isActive]);
+  }, [isActive, isMobile]);
 
   const handleClick = (e: any) => {
     // Only trigger click if not dragging
@@ -134,8 +144,8 @@ const FloatingQuestion = ({ question, answer, x, y, isActive, onClick, colorSche
     <motion.div
       className="absolute"
       style={{ 
-        left: `${Math.max(5, Math.min(95, x))}%`, 
-        top: `${Math.max(10, Math.min(80, y))}%`, 
+        left: `${Math.max(10, Math.min(95, isMobile ? Math.max(20, Math.min(80, x + (50 - x) * 0.3)) : x))}%`, 
+        top: `${Math.max(10, Math.min(80, isMobile ? Math.max(5, y - 15) : y))}%`, 
         zIndex: isActive ? 9999 : 100 
       }}
       initial={{ opacity: 0, scale: 0 }}
