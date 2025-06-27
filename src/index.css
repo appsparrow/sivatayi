@@ -634,7 +634,7 @@ html, body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 230vh;
+  height: 240vh;
   background: url('/abstract.png') center/cover;
   z-index: -1;
   transform: translateZ(0);
