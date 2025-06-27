@@ -42,13 +42,7 @@ const SearchInterface = ({ colorScheme = 'default' }: SearchInterfaceProps) => {
           text: 'text-blue-100',
           border: 'border-blue-700'
         };
-      case 'sunset':
-        return {
-          background: 'from-orange-600 to-pink-600',
-          card: 'bg-orange-900/90',
-          text: 'text-orange-100',
-          border: 'border-orange-700'
-        };
+
       case 'dark':
         return {
           background: 'from-gray-700 to-gray-900',

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, ArrowRight } from 'lucide-react';
+import { MessageSquare, ArrowRight, X } from 'lucide-react';
 
 interface UserGreetingProps {
   isOpen: boolean;
   onComplete: (name: string) => void;
+  onClose?: () => void;
   colorScheme?: string;
 }
 
-const UserGreeting = ({ isOpen, onComplete, colorScheme = 'default' }: UserGreetingProps) => {
+const UserGreeting = ({ isOpen, onComplete, onClose, colorScheme = 'default' }: UserGreetingProps) => {
   const [name, setName] = useState('');
   const [step, setStep] = useState<'greeting' | 'ready'>('greeting');
 
@@ -108,6 +109,20 @@ const UserGreeting = ({ isOpen, onComplete, colorScheme = 'default' }: UserGreet
             )}
             
             <div className={colorScheme === 'liquidgood' ? 'relative z-10' : ''}>
+              {/* Close Button */}
+              {onClose && (
+                <button
+                  onClick={onClose}
+                  className={`absolute top-4 right-4 p-2 rounded-lg transition-colors ${
+                    colorScheme === 'liquidglass' || colorScheme === 'liquidgood'
+                      ? 'bg-white/10 hover:bg-white/20 border border-white/20 text-white'
+                      : 'bg-gray-100 hover:bg-gray-200 border border-gray-200 text-gray-600'
+                  }`}
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+              
             {step === 'greeting' ? (
               <div className="text-center flex flex-col items-center justify-center">
                 {/* Bot Avatar */}

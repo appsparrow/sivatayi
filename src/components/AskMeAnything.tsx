@@ -83,22 +83,6 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
 
   const getColorClasses = () => {
     switch (colorScheme) {
-      case 'sunset':
-        return {
-          background: 'from-orange-600 to-pink-600',
-          sidebar: 'bg-gradient-to-br from-orange-100/95 to-pink-100/95 backdrop-blur-sm border border-orange-200/50 shadow-2xl',
-          header: 'border-orange-200/50',
-          iconBg: 'bg-orange-200/50 border-orange-300/50',
-          iconColor: 'text-orange-600',
-          textPrimary: 'text-orange-900',
-          textSecondary: 'text-orange-700/80',
-          button: 'bg-orange-200/50 hover:bg-orange-300/50 border-orange-300/50 text-orange-800',
-          closeButton: 'bg-orange-200/50 hover:bg-orange-300/50 border-orange-300/50 text-orange-800',
-          messageBg: 'bg-orange-200/40 border-orange-300/50 text-orange-900',
-          userMessageBg: 'bg-pink-200/50 border-pink-300/50 text-pink-900',
-          input: 'bg-orange-100/50 border-orange-300/50 text-orange-900 placeholder-orange-600/60',
-          disclaimer: 'bg-orange-200/40 border-orange-300/50'
-        };
       case 'liquidglass':
         return {
           background: 'from-blue-400 to-purple-400',
@@ -638,6 +622,7 @@ const AskMeAnything = ({ colorScheme = 'default' }: AskMeAnythingProps) => {
       <UserGreeting 
         isOpen={showGreeting}
         onComplete={handleGreetingComplete}
+        onClose={() => setShowGreeting(false)}
         colorScheme={colorScheme}
       />
     </>

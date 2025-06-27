@@ -966,7 +966,7 @@ const Index = () => {
               </motion.div>
               
               <span className="font-medium text-white group-hover:translate-x-0.5 transition-transform duration-200">
-                Ask me anything
+                Agent Skebot
               </span>
             </div>
           </motion.button>
@@ -1014,7 +1014,7 @@ const Index = () => {
                   ? 'text-gray-800'
                   : 'text-gray-800'
             } group-hover:translate-x-0.5 transition-transform duration-200`}>
-              Ask me anything
+                Agent Skebot
             </span>
             
             {/* Animated glow effect for liquid glass */}
