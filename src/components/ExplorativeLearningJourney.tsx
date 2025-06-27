@@ -51,37 +51,37 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
       name: 'AI & Machine Learning',
       description: 'Foundational and advanced courses in artificial intelligence, machine learning, and neural networks.',
       courses: 28,
-      color: 'bg-red-500'
+      color: 'bg-gray-800'
     },
     {
       name: 'Web Development',
       description: 'Full-stack web development courses covering front-end and back-end technologies.',
       courses: 32,
-      color: 'bg-blue-500'
+      color: 'bg-gray-800'
     },
     {
       name: 'Design & UX',
       description: 'User experience and design courses focused on creating intuitive and engaging digital interfaces.',
       courses: 18,
-      color: 'bg-green-500'
+      color: 'bg-gray-800'
     },
     {
       name: 'Cloud Computing',
       description: 'Courses on cloud platforms like AWS, Azure, and Google Cloud, covering deployment and scaling.',
       courses: 22,
-      color: 'bg-purple-500'
+      color: 'bg-gray-800'
     },
     {
       name: 'Data Science',
       description: 'Data science courses covering statistical analysis, data visualization, and big data technologies.',
       courses: 25,
-      color: 'bg-orange-500'
+      color: 'bg-gray-800'
     },
     {
       name: 'Salesforce',
       description: 'Salesforce certifications and courses covering development, administration, and architecture.',
       courses: 45,
-      color: 'bg-sky-500'
+      color: 'bg-gray-800'
     }
   ];
 
@@ -137,12 +137,22 @@ const ExplorativeLearningJourney = ({ colorScheme = 'default' }: ExplorativeLear
                 colorScheme === 'liquidglass' 
                   ? getPastelGlassColor(category.name) + ' hover:bg-white/20 hover:border-white/40'
                   : colorScheme === 'liquidgood'
-                    ? 'liquidgood-glass-pill hover:bg-white/20 hover:border-white/40'
-                    : category.color
+                    ? 'liquidgood-glass-pill hover:bg-grey:800/20 hover:border-white/40'
+                    : colorScheme === 'professional'
+                      ? `${selectedCategory === category.name 
+                          ? 'bg-gray-800 text-white border-gray-800' 
+                          : 'bg-gray-200 text-gray-700 border-gray-200 hover:bg-gray-300'}`
+                      : category.color
               } ${
-                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' ? 'text-white font-medium' : 'text-white'
+                colorScheme === 'liquidglass' || colorScheme === 'liquidgood' 
+                  ? 'text-white font-medium' 
+                  : colorScheme === 'professional'
+                    ? '' // Color already handled above
+                    : 'text-white'
               } hover:shadow-lg ${
-                selectedCategory === category.name ? 'ring-2 ring-white shadow-lg' : ''
+                selectedCategory === category.name && colorScheme !== 'professional' 
+                  ? 'ring-2 ring-white shadow-lg' 
+                  : ''
               }`}
               onClick={() => setSelectedCategory(selectedCategory === category.name ? null : category.name)}
             >

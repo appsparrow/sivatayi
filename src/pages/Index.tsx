@@ -757,7 +757,7 @@ const Index = () => {
                   Explorative Learning Journey
                 </h2>
                 <p className={`text-xl max-w-3xl mx-auto ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'}`}>
-                  Average of 350 hours invested in learning per year through courses, experiment-based learning, 
+                  Several hundred hours invested in learning per year through courses, experiment-based learning, 
                   and systematic implementation strategy to reinforce knowledge.
                 </p>
               </motion.div>
@@ -892,6 +892,18 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
+
+
+
+
+<section className="py-8 px-6">
+
+<p className={`text-sm md:text-sm mb-8 ${colorScheme === 'liquidglass' ? 'text-gray-300' : colorScheme === 'professional' ? 'text-gray-700' : 'text-gray-600'} max-w-3xl mx-auto`}>
+      Creator's Note: <br/> This site is where I blend human-centered design with AI. It started as a simple update from wordpress, then I got curious about Apple's liquid glass... Now, it's an experiment in progress. I've added themes, a glowing cursor, and a personal AI assistant to see what's possible. Liquid glass works best on Chrome. Hope it inspires you to imagine what's possible!
+</p>  
+</section>
+
+     
 
       {/* Star Feedback Section */}
       <section className="py-12 px-6">
